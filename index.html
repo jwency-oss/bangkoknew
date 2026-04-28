@@ -158,20 +158,28 @@
   .link-muvmi { background: #FF6B35; color: white; }
   .link-gmaps { background: #4285F4; color: white; grid-column: span 2; }
 
-  /* 短句 */
-  .phrase-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 0.9rem 1rem; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .phrase-thai { font-size: 20px; color: #E53935; font-weight: 600; margin-bottom: 4px; }
-  .phrase-zh   { font-size: 15px; color: #222; }
-  .phrase-roman{ font-size: 12px; color: #888; margin-top: 2px; margin-bottom: 10px; }
-  .sound-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .sound-btn { display: block; padding: 9px 6px; border-radius: 10px; font-size: 13px; font-weight: 500; border: 1px solid #ddd; background: #f9f9f9; color: #333; text-align: center; text-decoration: none; cursor: pointer; }
+  /* 泰語左右佈局 */
+  .custom-trans-box { background: #FFF8E1; border: 1px solid #FFE082; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+  .custom-trans-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; margin-bottom: 8px; outline: none; }
+  .custom-trans-btn { width: 100%; padding: 10px; border-radius: 8px; background: #FFB300; color: #fff; font-weight: 600; border: none; cursor: pointer; font-size: 14px; }
+  
+  .phrase-layout { display: flex; height: 68vh; border-top: 1px solid #eee; margin-left: -1rem; margin-right: -1rem; }
+  .phrase-sidebar { width: 85px; background: #f9f9f9; overflow-y: auto; border-right: 1px solid #eee; flex-shrink: 0; }
+  .phrase-menu { padding: 14px 0; font-size: 13px; color: #666; text-align: center; cursor: pointer; position: relative; border-bottom: 1px solid #eee; }
+  .phrase-menu.active { background: #fff; color: #E53935; font-weight: 600; }
+  .phrase-menu.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #E53935; }
+  .phrase-content { flex: 1; padding: 12px; overflow-y: auto; background: #fff; }
+  .phrase-list { display: none; }
+  .phrase-list.active { display: block; }
+  
+  .phrase-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 0.8rem 0.9rem; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .phrase-thai { font-size: 18px; color: #E53935; font-weight: 600; margin-bottom: 4px; }
+  .phrase-zh   { font-size: 14px; color: #222; }
+  .phrase-roman{ font-size: 11px; color: #888; margin-top: 2px; margin-bottom: 8px; }
+  .sound-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .sound-btn { display: block; padding: 8px 4px; border-radius: 8px; font-size: 12px; font-weight: 500; border: 1px solid #ddd; background: #f9f9f9; color: #333; text-align: center; text-decoration: none; cursor: pointer; }
   .sound-btn.gtrans { background: #E8F5E9; border-color: #66BB6A; color: #2E7D32; }
   .sound-btn.speech { background: #E3F2FD; border-color: #64B5F6; color: #1565C0; }
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
-  .badge-hotel { background: #E3F2FD; color: #1565C0; }
-  .badge-night { background: #FFF3E0; color: #E65100; }
-  .badge-food  { background: #E8F5E9; color: #2E7D32; }
-  .hint-box { background: #E8F5E9; border: 1px solid #66BB6A; border-radius: 10px; padding: 10px 13px; font-size: 12px; color: #2E7D32; margin-bottom: 14px; line-height: 1.6; }
 
   /* 預約 */
   .booking-btn { display: flex; align-items: center; gap: 13px; background: #fff; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 10px; border: 1px solid #eee; text-decoration: none; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
@@ -294,7 +302,7 @@
         </div>
       </div>
       <div class="step-body">
-        沿著走道繼續直行，看到 <strong>「4 號出口」</strong> 的圓形黃色標誌，繼續直行不要出去。
+        沿著走道繼續直行，看到 <strong>「4 號出口」</strong> ของ圓形黃色標誌，繼續直行不要出去。
       </div>
       <div class="step-highlight">🟡 看到圓形黃底「4」號標誌，繼續直行</div>
       <div class="airport-img-box" id="airport-img-3" onclick="triggerAirportUpload(3)"><span>📷 點擊上傳接機照片</span></div>
@@ -364,7 +372,6 @@
     </div>
     <div class="cat-label" style="margin-top:0">5月行程總覽</div>
     <div class="itinerary">
-
       <div class="day-row" onclick="toggleDay('d1')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 1 · 5/10（日）</div><div class="day-plan">落地首戰 · 恰圖洽 · 朱拉美食街</div></div><span id="d1-arrow">›</span></div>
       <div id="d1" class="day-detail">
         <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">11:10</div><div class="stop-name">素萬那普機場抵達</div><div class="stop-note">→ 按機場接機流程找接機人員</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Suvarnabhumi Airport, Bang Phli',HOTEL_ADDR)">🚕 往飯店</button></div></div></div>
@@ -375,7 +382,7 @@
         <div class="arrow-row">↓</div>
         <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">17:30</div><div class="stop-name">朱拉隆功區</div><div class="stop-note">從恰圖洽叫車前往</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Chatuchak Weekend Market','Chulalongkorn Area, Bangkok')">🚕 出發</button></div></div></div>
         <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">18:30</div><div class="stop-name">朱拉 50 巷廚房</div></div></div>
+        <div class="stop-block"><div class="stop-left"><div class="stop-time">18:30</div><div class="stop-name">朱ら 50 巷廚房</div></div></div>
         <div class="arrow-row">↓</div>
         <div class="stop-block"><div class="stop-left"><div class="stop-time">19:30</div><div class="stop-name">朱拉隆功夜市（Banthat Thong）</div><div class="stop-note">散步消食</div></div></div>
         <div class="arrow-row">↓</div>
@@ -383,7 +390,6 @@
         <div class="arrow-row">↓</div>
         <div class="stop-block"><div class="stop-left"><div class="stop-time">23:27</div><div class="stop-name">回飯店休息</div><div class="stop-note">🚶 從按摩店步行回飯店</div></div></div>
       </div>
-
       <div class="day-row" onclick="toggleDay('d2')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 2 · 5/11（一）</div><div class="day-plan">大城遠征 · 獅子動物園 · Save One Go 夜市</div></div><span id="d2-arrow">›</span></div>
       <div id="d2" class="day-detail">
         <div class="stop-block"><div class="stop-left"><div class="stop-time">08:00</div><div class="stop-name">飯店出發前往大城 <span class="tag-private">私人包車全日</span></div></div></div>
@@ -404,7 +410,6 @@
         <div class="arrow-row">↓</div>
         <div class="stop-block"><div class="stop-left"><div class="stop-time">21:30</div><div class="stop-name">飯店周邊足部按摩</div><div class="stop-note">隨機挑選評價好的店</div></div></div>
       </div>
-
       <div class="day-row" onclick="toggleDay('d3')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 3 · 5/12（二）</div><div class="day-plan">侏羅紀 · ICONSIAM · 海鮮自助餐</div></div><span id="d3-arrow">›</span></div>
       <div id="d3" class="day-detail">
         <div class="stop-block"><div class="stop-left"><div class="stop-time">10:00</div><div class="stop-name">睡到自然醒 😴</div></div></div>
@@ -421,7 +426,6 @@
         <div class="arrow-row">↓</div>
         <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">22:45</div><div class="stop-name">新喬德夜市 JODD FAIRS Ratchada</div></div><div class="stop-actions"><button class="ride-mini back" onclick="fillAndRide('Jodd Fairs Night Market, Ratchadaphisek Rd',HOTEL_ADDR)">🏠 回飯店</button></div></div></div>
       </div>
-
       <div class="day-row" onclick="toggleDay('d4')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 4 · 5/13（三）</div><div class="day-plan">臘腸狗咖啡廳 · POP MART · 百貨採買</div></div><span id="d4-arrow">›</span></div>
       <div id="d4" class="day-detail">
         <div class="stop-block"><div class="stop-left"><div class="stop-time">09:30</div><div class="stop-name">飯店叫外送 🛵</div><div class="stop-note">用 Grab Food 點 Phed Mark 打拋豬至飯店享用</div></div></div>
@@ -438,7 +442,6 @@
         <div class="arrow-row">↓</div>
         <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">22:00</div><div class="stop-name">Makkha Health & Spa（Sukhumvit 24）</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Big C Ratchadamri, Bangkok','Makkha Health Spa, Sukhumvit Soi 24')">🚕 出發</button></div></div></div>
       </div>
-
       <div class="day-row" onclick="toggleDay('d5')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 5 · 5/14（四）</div><div class="day-plan">平安回程</div></div><span id="d5-arrow">›</span></div>
       <div id="d5" class="day-detail">
         <div class="stop-block"><div class="stop-left"><div class="stop-time">08:30</div><div class="stop-name">飯店退房</div><div class="stop-note">做最後行李打包</div></div></div>
@@ -491,25 +494,90 @@
 
   <div id="phrases" class="section">
     <div class="pt"></div>
-    <div class="hint-box">🔗 綠色 = Google 翻譯（按喇叭聽）・🔊 藍色 = 裝置語音</div>
-    <div class="cat-label">飯店 <span class="badge badge-hotel">Hotel</span></div>
-    <div class="phrase-card"><div class="phrase-thai">ห้องของฉันอยู่ที่ไหน</div><div class="phrase-zh">我的房間在哪裡？</div><div class="phrase-roman">Hông khǒng chǎn yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห้องของฉันอยู่ที่ไหน&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ห้องของฉันอยู่ที่ไหน')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">ขอฝากกระเป๋าไว้ก่อนได้ไหม</div><div class="phrase-zh">可以先寄放行李嗎？</div><div class="phrase-roman">Khǒo fàak kra-pǎo wái kòon dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอฝากกระเป๋าไว้ก่อนได้ไหม&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ขอฝากกระเป๋าไว้ก่อนได้ไหม')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">อินเทอร์เน็ตรหัสผ่านคืออะไร</div><div class="phrase-zh">Wifi 密碼是什麼？</div><div class="phrase-roman">In-thoe-nét ra-hát phàan khue a-rai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อินเทอร์เน็ตรหัสผ่านคืออะไร&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('อินเทอร์เน็ตรหัสผ่านคืออะไร')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">เช็คเอาท์กี่โมง</div><div class="phrase-zh">幾點退房？</div><div class="phrase-roman">Chék-àut kìi moong</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เช็คเอาท์กี่โมง&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('เช็คเอาท์กี่โมง')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">แอร์ไม่เย็น ช่วยซ่อมได้ไหม</div><div class="phrase-zh">冷氣不冷，可以修嗎？</div><div class="phrase-roman">Ae mâi yen, chûay sôm dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แอร์ไม่เย็น ช่วยซ่อมได้ไหม&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('แอร์ไม่เย็น ช่วยซ่อมได้ไหม')">🔊 裝置發音</button></div></div>
-    <div class="cat-label">夜市 <span class="badge badge-night">Night Market</span></div>
-    <div class="phrase-card"><div class="phrase-thai">ราคาเท่าไหร่</div><div class="phrase-zh">多少錢？</div><div class="phrase-roman">Raa-khaa thâo-rài</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ราคาเท่าไหร่&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ราคาเท่าไหร่')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">ลดราคาได้ไหม</div><div class="phrase-zh">可以便宜一點嗎？</div><div class="phrase-roman">Lót raa-khaa dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลดราคาได้ไหม&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ลดราคาได้ไหม')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">สแกน QR ได้ไหม</div><div class="phrase-zh">可以掃 QR Code 嗎？</div><div class="phrase-roman">Sa-gaen QR dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สแกน QR ได้ไหม&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('สแกน QR ได้ไหม')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">ห้องน้ำอยู่ที่ไหน</div><div class="phrase-zh">廁所在哪裡？</div><div class="phrase-roman">Hông nám yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห้องน้ำอยู่ที่ไหน&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ห้องน้ำอยู่ที่ไหน')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">ขอรับเงินทอนด้วย</div><div class="phrase-zh">請找我零錢</div><div class="phrase-roman">Khǒo ráp ngoen thoon dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอรับเงินทอนด้วย&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ขอรับเงินทอนด้วย')">🔊 裝置發音</button></div></div>
-    <div class="cat-label">餐廳 <span class="badge badge-food">Restaurant</span></div>
-    <div class="phrase-card"><div class="phrase-thai">ไม่เผ็ด ได้ไหม</div><div class="phrase-zh">不辣，可以嗎？</div><div class="phrase-roman">Mâi phèt, dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่เผ็ด ได้ไหม&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่เผ็ด ได้ไหม')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">เก็บเงินด้วย</div><div class="phrase-zh">買單！</div><div class="phrase-roman">Kèp ngoen dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เก็บเงินด้วย&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('เก็บเงินด้วย')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">อร่อยมากครับ</div><div class="phrase-zh">非常好吃！</div><div class="phrase-roman">A-ròi mâak khráp</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อร่อยมากครับ&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('อร่อยมากครับ')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">ไม่ใส่ผักชี ได้ไหม</div><div class="phrase-zh">不要加香菜，可以嗎？</div><div class="phrase-roman">Mâi sài phàk-chii, dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่ใส่ผักชี ได้ไหม&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่ใส่ผักชี ได้ไหม')">🔊 裝置發音</button></div></div>
-    <div class="phrase-card"><div class="phrase-thai">แพ้อาหารทะเล</div><div class="phrase-zh">我對海鮮過敏</div><div class="phrase-roman">Pháe aa-hǎan tha-lee</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แพ้อาหารทะเล&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('แพ้อาหารทะเล')">🔊 裝置發音</button></div></div>
+    
+    <div class="custom-trans-box">
+      <div style="font-size:13px; font-weight:600; color:#F57F17; margin-bottom:6px;">✍️ 自訂翻譯</div>
+      <input type="text" id="custom-zh-input" class="custom-trans-input" placeholder="輸入中文，例如：我要去機場">
+      <button class="custom-trans-btn" onclick="doCustomTranslate()">🔗 Google 翻譯成泰文</button>
+    </div>
+
+    <div class="phrase-layout">
+      <div class="phrase-sidebar">
+        <div class="phrase-menu active" id="menu-hotel" onclick="switchPhraseCat('hotel')">🏨 飯店</div>
+        <div class="phrase-menu" id="menu-night" onclick="switchPhraseCat('night')">🎪 夜市</div>
+        <div class="phrase-menu" id="menu-food" onclick="switchPhraseCat('food')">🍽 餐廳</div>
+        <div class="phrase-menu" id="menu-mall" onclick="switchPhraseCat('mall')">🛍 百貨</div>
+        <div class="phrase-menu" id="menu-sos" onclick="switchPhraseCat('sos')">🚨 緊急</div>
+      </div>
+      
+      <div class="phrase-content">
+        <div class="phrase-list active" id="list-hotel">
+          <div class="phrase-card"><div class="phrase-thai">เช็คอินครับ/ค่ะ</div><div class="phrase-zh">我要辦理入住</div><div class="phrase-roman">Chék-in khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เช็คอินครับ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เช็คอินครับ')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">เช็คเอาท์ครับ/ค่ะ</div><div class="phrase-zh">我要退房</div><div class="phrase-roman">Chék-àut khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เช็คเอาท์ครับ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เช็คเอาท์ครับ')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ห้องของฉันอยู่ที่ไหน</div><div class="phrase-zh">我的房間在哪裡？</div><div class="phrase-roman">Hông khǒng chǎn yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห้องของฉันอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ห้องของฉันอยู่ที่ไหน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ขอฝากกระเป๋าไว้ก่อนได้ไหม</div><div class="phrase-zh">可以寄放行李嗎？</div><div class="phrase-roman">Khǒo fàak kra-pǎo wái kòon dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอฝากกระเป๋าไว้ก่อนได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอฝากกระเป๋าไว้ก่อนได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">อินเทอร์เน็ตรหัสผ่านคืออะไร</div><div class="phrase-zh">Wifi 密碼是什麼？</div><div class="phrase-roman">In-thoe-nét ra-hát phàan khue a-rai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อินเทอร์เน็ตรหัสผ่านคืออะไร&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อินเทอร์เน็ตรหัสผ่านคืออะไร')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">แอร์ไม่เย็น ช่วยซ่อมได้ไหม</div><div class="phrase-zh">冷氣不冷，可以修嗎？</div><div class="phrase-roman">Ae mâi yen, chûay sôm dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แอร์ไม่เย็น ช่วยซ่อมได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แอร์ไม่เย็น ช่วยซ่อมได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ช่วยทำความสะอาดห้องหน่อย</div><div class="phrase-zh">請幫我打掃房間</div><div class="phrase-roman">Chûay tham khwaam sa-àat hông nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยทำความสะอาดห้องหน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยทำความสะอาดห้องหน่อย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ขอผ้าเช็ดตัวเพิ่มได้ไหม</div><div class="phrase-zh">可以多給我毛巾嗎？</div><div class="phrase-roman">Khǒo phâa chét tua phôem dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอผ้าเช็ดตัวเพิ่มได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอผ้าเช็ดตัวเพิ่มได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">อาหารเช้าเริ่มกี่โมง</div><div class="phrase-zh">早餐幾點開始？</div><div class="phrase-roman">Aa-hǎan cháo rôem kìi moong</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อาหารเช้าเริ่มกี่โมง&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อาหารเช้าเริ่มกี่โมง')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ช่วยเรียกแท็กซี่หน่อย</div><div class="phrase-zh">請幫我叫計程車</div><div class="phrase-roman">Chûay rîak tháek-sîi nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยเรียกแท็กซี่หน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยเรียกแท็กซี่หน่อย')">🔊 發音</button></div></div>
+        </div>
+        
+        <div class="phrase-list" id="list-night">
+          <div class="phrase-card"><div class="phrase-thai">ราคาเท่าไหร่</div><div class="phrase-zh">多少錢？</div><div class="phrase-roman">Raa-khaa thâo-rài</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ราคาเท่าไหร่&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ราคาเท่าไหร่')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ลดราคาได้ไหม</div><div class="phrase-zh">可以便宜一點嗎？</div><div class="phrase-roman">Lót raa-khaa dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลดราคาได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ลดราคาได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">เอาอันนี้</div><div class="phrase-zh">我要這個</div><div class="phrase-roman">Ao an níi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เอาอันนี้&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เอาอันนี้')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">สแกน QR ได้ไหม</div><div class="phrase-zh">可以掃 QR Code 嗎？</div><div class="phrase-roman">Sa-gaen QR dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สแกน QR ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สแกน QR ได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ขอรับเงินทอนด้วย</div><div class="phrase-zh">請找零錢</div><div class="phrase-roman">Khǒo ráp ngoen thoon dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอรับเงินทอนด้วย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอรับเงินทอนด้วย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ห้องน้ำอยู่ที่ไหน</div><div class="phrase-zh">廁所在哪裡？</div><div class="phrase-roman">Hông nám yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห้องน้ำอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ห้องน้ำอยู่ที่ไหน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">แพงไป</div><div class="phrase-zh">太貴了</div><div class="phrase-roman">Phaeng pai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แพงไป&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แพงไป')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">มีสีอื่นไหม</div><div class="phrase-zh">有其他顏色嗎？</div><div class="phrase-roman">Mii sǐi ùen mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีสีอื่นไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีสีอื่นไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ลองใส่ได้ไหม</div><div class="phrase-zh">可以試穿嗎？</div><div class="phrase-roman">Loong sài dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลองใส่ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ลองใส่ได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ไม่เอาถุงพลาสติก</div><div class="phrase-zh">不要塑膠袋</div><div class="phrase-roman">Mâi ao thǔng phlát-sa-tìk</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่เอาถุงพลาสติก&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่เอาถุงพลาสติก')">🔊 發音</button></div></div>
+        </div>
+
+        <div class="phrase-list" id="list-food">
+          <div class="phrase-card"><div class="phrase-thai">สองท่าน</div><div class="phrase-zh">兩位</div><div class="phrase-roman">Sǒong thâan</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สองท่าน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สองท่าน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">สั่งอาหารหน่อย</div><div class="phrase-zh">我要點餐</div><div class="phrase-roman">Sàng aa-hǎan nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สั่งอาหารหน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สั่งอาหารหน่อย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">มีเมนูภาษาจีนไหม</div><div class="phrase-zh">有中文菜單嗎？</div><div class="phrase-roman">Mii mee-nuu phaa-sǎa jiin mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีเมนูภาษาจีนไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีเมนูภาษาจีนไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ไม่เผ็ด</div><div class="phrase-zh">不辣</div><div class="phrase-roman">Mâi phèt</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่เผ็ด&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่เผ็ด')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ไม่ใส่ผักชี</div><div class="phrase-zh">不要加香菜</div><div class="phrase-roman">Mâi sài phàk-chii</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่ใส่ผักชี&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่ใส่ผักชี')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">แพ้อาหารทะเล</div><div class="phrase-zh">我對海鮮過敏</div><div class="phrase-roman">Pháe aa-hǎan tha-lee</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แพ้อาหารทะเล&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แพ้อาหารทะเล')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">อร่อยมากครับ</div><div class="phrase-zh">非常好吃</div><div class="phrase-roman">A-ròi mâak khráp</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อร่อยมากครับ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อร่อยมากครับ')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">เก็บเงินด้วย</div><div class="phrase-zh">買單！</div><div class="phrase-roman">Kèp ngoen dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เก็บเงินด้วย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เก็บเงินด้วย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ห่อกลับบ้านได้ไหม</div><div class="phrase-zh">可以外帶嗎？</div><div class="phrase-roman">Hòo klàp bâan dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห่อกลับบ้านได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ห่อกลับบ้านได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">มีน้ำเปล่าไหม</div><div class="phrase-zh">有白開水嗎？</div><div class="phrase-roman">Mii nám plào mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีน้ำเปล่าไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีน้ำเปล่าไหม')">🔊 發音</button></div></div>
+        </div>
+
+        <div class="phrase-list" id="list-mall">
+          <div class="phrase-card"><div class="phrase-thai">ซุปเปอร์มาร์เก็ตอยู่ที่ไหน</div><div class="phrase-zh">超市在哪裡？</div><div class="phrase-roman">Súp-pôe-maa-két yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ซุปเปอร์มาร์เก็ตอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ซุปเปอร์มาร์เก็ตอยู่ที่ไหน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ทำ VAT Refund ได้ไหม</div><div class="phrase-zh">可以退稅嗎？</div><div class="phrase-roman">Tham VAT Refund dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ทำ VAT Refund ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ทำ VAT Refund ได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">มีส่วนลดไหม</div><div class="phrase-zh">有打折嗎？</div><div class="phrase-roman">Mii sùan lót mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีส่วนลดไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีส่วนลดไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">รูดบัตรได้ไหม</div><div class="phrase-zh">可以刷卡嗎？</div><div class="phrase-roman">Rûut bàt dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=รูดบัตรได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('รูดบัตรได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ขอดูต่อน</div><div class="phrase-zh">我只是看看</div><div class="phrase-roman">Khǒo duu kòon</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอดูต่อน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอดูต่อน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ซื้ออันนี้</div><div class="phrase-zh">我要買這個</div><div class="phrase-roman">Súe an níi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ซื้ออันนี้&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ซื้ออันนี้')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ลิฟต์อยู่ที่ไหน</div><div class="phrase-zh">電梯在哪裡？</div><div class="phrase-roman">Líp yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลิฟต์อยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ลิฟต์อยู่ที่ไหน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">มีของใหม่ไหม</div><div class="phrase-zh">有全新的嗎？</div><div class="phrase-roman">Mii khǒong mài mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีของใหม่ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีของใหม่ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">อันนี้มีรับประกันไหม</div><div class="phrase-zh">這個有保固嗎？</div><div class="phrase-roman">An níi mii ráp pra-kan mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อันนี้มีรับประกันไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อันนี้มีรับประกันไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">แลกเงินได้ที่ไหน</div><div class="phrase-zh">哪裡可以換錢？</div><div class="phrase-roman">Lâek ngoen dâi thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แลกเงินได้ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แลกเงินได้ที่ไหน')">🔊 發音</button></div></div>
+        </div>
+
+        <div class="phrase-list" id="list-sos">
+          <div class="phrase-card"><div class="phrase-thai">ช่วยด้วย</div><div class="phrase-zh">救命！</div><div class="phrase-roman">Chûay dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยด้วย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยด้วย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ฉันหลงทาง</div><div class="phrase-zh">我迷路了</div><div class="phrase-roman">Chǎn lǒng thaang</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ฉันหลงทาง&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ฉันหลงทาง')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">โรงพยาบาลอยู่ที่ไหน</div><div class="phrase-zh">哪裡有醫院？</div><div class="phrase-roman">Roong-pha-yaa-baan yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=โรงพยาบาลอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('โรงพยาบาลอยู่ที่ไหน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ฉันไม่สบาย</div><div class="phrase-zh">我生病了</div><div class="phrase-roman">Chǎn mâi sa-baai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ฉันไม่สบาย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ฉันไม่สบาย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ช่วยเรียกตำรวจหน่อย</div><div class="phrase-zh">請幫我叫警察</div><div class="phrase-roman">Chûay rîak tam-rùat nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยเรียกตำรวจหน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยเรียกตำรวจหน่อย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">กระเป๋าสตางค์หาย</div><div class="phrase-zh">我的錢包不見了</div><div class="phrase-roman">Kra-pǎo taang haai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=กระเป๋าสตางค์หาย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('กระเป๋าสตางค์หาย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">พาสปอร์ตหาย</div><div class="phrase-zh">護照不見了</div><div class="phrase-roman">Phát-sa-pòot haai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=พาสปอร์ตหาย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('พาสปอร์ตหาย')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">สถานทูตอยู่ที่ไหน</div><div class="phrase-zh">請問大使館在哪？</div><div class="phrase-roman">Sa-thǎan-thûut yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สถานทูตอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สถานทูตอยู่ที่ไหน')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ขอใช้โทรศัพท์ได้ไหม</div><div class="phrase-zh">可以借打電話嗎？</div><div class="phrase-roman">Khǒo yûem thoo-ra-sàp dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอใช้โทรศัพท์ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอใช้โทรศัพท์ได้ไหม')">🔊 發音</button></div></div>
+          <div class="phrase-card"><div class="phrase-thai">ฟังไม่เข้าใจ</div><div class="phrase-zh">我聽不懂</div><div class="phrase-roman">Fang mâi khâo-jai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ฟังไม่เข้าใจ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ฟังไม่เข้าใจ')">🔊 發音</button></div></div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <div id="booking" class="section">
@@ -919,6 +987,20 @@ function handleBooking(e, scheme, fallback) {
   iframe.src = scheme;
   document.body.appendChild(iframe);
   setTimeout(() => { document.body.removeChild(iframe); window.open(fallback, '_blank'); }, 1500);
+}
+
+// ── 泰語 ──
+function doCustomTranslate() {
+  const text = document.getElementById('custom-zh-input').value.trim();
+  if (!text) { showToast('請輸入中文'); return; }
+  window.open('https://translate.google.com/?sl=zh-TW&tl=th&text=' + encodeURIComponent(text) + '&op=translate', '_blank');
+}
+
+function switchPhraseCat(cat) {
+  document.querySelectorAll('.phrase-menu').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.phrase-list').forEach(el => el.classList.remove('active'));
+  document.getElementById('menu-' + cat).classList.add('active');
+  document.getElementById('list-' + cat).classList.add('active');
 }
 
 // ── 語音 ──
