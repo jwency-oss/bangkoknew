@@ -10,7 +10,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; background: #f5f5f5; }
-  .app { max-width: 480px; margin: 0 auto; background: #fff; min-height: 100vh; }
+  .app { max-width: 480px; margin: 0 auto; background: #fff; min-height: 100vh; position: relative; }
 
   .header { background: #E53935; color: white; padding: 0; }
   .header-main { padding: 0.85rem 1.25rem 0.7rem; }
@@ -18,10 +18,8 @@
   .header p { font-size: 11px; opacity: 0.85; margin-top: 2px; }
   .rate-banner { background: #B71C1C; padding: 8px 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
   .rate-text { font-size: 13px; font-weight: 600; color: white; }
-  .rate-sub { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 1px; }
 
-  .tabs { display: flex; gap: 4px; padding: 0.6rem 0.75rem; background: #fff; border-bottom: 1px solid #eee; overflow-x: auto; position: sticky; top: 0; z-index: 50; -webkit-overflow-scrolling: touch; }
-  .tabs::-webkit-scrollbar { display: none; }
+  .tabs { display: flex; gap: 4px; padding: 0.6rem 0.75rem; background: #fff; border-bottom: 1px solid #eee; overflow-x: auto; position: sticky; top: 0; z-index: 50; }
   .tab { flex-shrink: 0; padding: 6px 11px; border-radius: 999px; font-size: 12px; border: 1px solid #ddd; background: #fff; color: #666; cursor: pointer; white-space: nowrap; }
   .tab.active { background: #E53935; color: white; border-color: #E53935; }
 
@@ -29,941 +27,328 @@
   .section.active { display: block; }
   .pt { padding-top: 0.85rem; }
 
-  /* Modal 通用 */
+  /* 記帳模組樣式 */
+  .budget-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1.2rem; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .budget-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; font-size: 14px; }
+  .budget-btn { width: 100%; padding: 12px; background: #2E7D32; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .budget-list { margin-top: 15px; }
+  .budget-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .summary-box { background: #E8F5E9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px; }
+  .summary-val { font-size: 24px; font-weight: 700; color: #2E7D32; }
+
+  /* Modal 與其他維持原樣 */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: flex-end; justify-content: center; }
   .modal-overlay.show { display: flex; }
   .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem 1.25rem 2rem; width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto; }
-  .modal-title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-  .modal-sub { font-size: 12px; color: #888; margin-bottom: 16px; }
-  .modal-close { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: #f5f5f5; font-size: 14px; cursor: pointer; margin-top: 10px; }
+  .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .qr-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; text-align: center; position: relative; }
+  .airport-img-box { width: 100%; height: 160px; border: 2px dashed #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-top: 10px; overflow: hidden; }
+  .airport-img-box img { width: 100%; height: 100%; object-fit: cover; }
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #222; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; opacity: 0; transition: 0.3s; z-index: 999; pointer-events: none; }
+  .toast.show { opacity: 1; }
 
-  /* 匯率 */
-  .rate-display-big { background: #FFF8E1; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; text-align: center; }
-  .rate-big { font-size: 26px; font-weight: 700; color: #E53935; }
-  .rate-label { font-size: 12px; color: #888; margin-top: 2px; }
-  .calc-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-  .calc-label { font-size: 13px; color: #888; min-width: 28px; }
-  .calc-input { flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; background: #fafafa; }
-  .calc-result { background: #E8F5E9; border-radius: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; color: #2E7D32; text-align: center; margin-bottom: 16px; }
-
-  /* 信用卡比較 */
-  .card-section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
-  .card-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
-  .card-input { flex: 1; padding: 9px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fafafa; }
-  .card-btn { padding: 9px 16px; border-radius: 10px; background: #E53935; color: white; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .card-result-list { display: flex; flex-direction: column; gap: 8px; }
-  .card-item { border-radius: 12px; padding: 12px 14px; border: 1px solid #eee; }
+  /* 匯率與卡片比較 */
+  .calc-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; margin-bottom: 8px; }
+  .card-item { border-radius: 12px; padding: 12px; border: 1px solid #eee; margin-bottom: 8px; }
   .card-item.best { border-color: #4CAF50; background: #F1F8E9; }
-  .card-rank { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
-  .card-name { font-size: 14px; font-weight: 600; }
-  .card-detail { font-size: 12px; color: #666; margin-top: 3px; line-height: 1.6; }
-  .card-saving { font-size: 13px; font-weight: 600; color: #2E7D32; }
-  .winner-badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 999px; background: #4CAF50; color: white; margin-left: 6px; }
-  .payment-card { border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
-  .payment-card.cash { background: #E3F2FD; border: 1px solid #90CAF9; }
-  .payment-card.card { background: #F3E5F5; border: 1px solid #CE93D8; }
-  .payment-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-  .payment-detail { font-size: 12px; color: #555; line-height: 1.6; }
-  .tip-box { background: #FFF3E0; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #E65100; margin-bottom: 10px; line-height: 1.6; }
 
   /* 密碼鎖 */
-  .lock-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; padding: 2rem; text-align: center; }
-  .lock-icon { font-size: 48px; margin-bottom: 12px; }
-  .lock-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-  .lock-sub { font-size: 13px; color: #888; margin-bottom: 20px; }
-  .pin-dots { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; }
-  .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ddd; background: transparent; transition: all 0.2s; }
+  .lock-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; padding: 2rem; }
+  .pin-dots { display: flex; gap: 12px; margin-bottom: 20px; }
+  .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ddd; }
   .pin-dot.filled { background: #E53935; border-color: #E53935; }
   .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 240px; }
-  .pin-key { padding: 16px; border-radius: 50%; border: 1px solid #eee; background: #fafafa; font-size: 20px; font-weight: 500; cursor: pointer; text-align: center; }
-  .pin-key:active { background: #E53935; color: white; }
-  .pin-key.del { font-size: 16px; }
-  .pin-error { color: #E53935; font-size: 13px; margin-top: 8px; min-height: 20px; }
+  .pin-key { padding: 16px; border-radius: 50%; border: 1px solid #eee; background: #fafafa; font-size: 20px; cursor: pointer; }
 
-  /* QR Code 區 & 機場照片區 */
-  .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .qr-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); text-align: center; cursor: pointer; }
-  .qr-card:active { background: #fafafa; }
-  .qr-icon { font-size: 32px; margin-bottom: 6px; }
-  .qr-name { font-size: 13px; font-weight: 600; }
-  .qr-sub { font-size: 11px; color: #888; margin-top: 2px; }
-  .qr-display { text-align: center; }
-  .qr-placeholder { width: 200px; height: 200px; border: 2px dashed #ddd; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 13px; color: #aaa; background: #fafafa; }
-  .qr-big-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-  .qr-big-sub { font-size: 12px; color: #888; margin-bottom: 12px; }
-  .qr-note { font-size: 12px; color: #666; background: #FFF3E0; border-radius: 8px; padding: 8px 12px; line-height: 1.6; }
-  .qr-add-btn { width: 100%; padding: 12px; border-radius: 10px; background: #E53935; color: white; border: none; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 12px; }
-  .airport-img-box { width: 100%; height: 180px; border: 2px dashed #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-top: 10px; background: #fafafa; font-size: 13px; color: #aaa; cursor: pointer; overflow: hidden; }
-  .airport-img-box img { width: 100%; height: 100%; object-fit: cover; }
+  /* 票券管理 */
+  .qr-del-btn { position: absolute; top: 5px; right: 5px; background: rgba(229,57,53,0.1); color: #E53935; border: none; width: 24px; height: 24px; border-radius: 50%; font-size: 12px; cursor: pointer; }
+  .qr-add-card { border: 2px dashed #ddd; background: #fafafa; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; border-radius: 14px; cursor: pointer; }
 
-  /* 機場流程 */
-  .airport-hero { background: linear-gradient(135deg, #1565C0, #0D47A1); border-radius: 14px; padding: 1rem 1.2rem; color: white; margin-bottom: 14px; }
-  .airport-hero h2 { font-size: 17px; font-weight: 600; margin-bottom: 3px; }
-  .airport-hero p { font-size: 12px; opacity: 0.85; line-height: 1.5; }
-  .step-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .step-header { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
-  .step-num { width: 32px; height: 32px; border-radius: 50%; background: #E53935; color: white; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .step-title { font-size: 15px; font-weight: 600; }
-  .step-sub { font-size: 12px; color: #888; margin-top: 2px; }
-  .step-body { font-size: 13px; color: #444; line-height: 1.7; }
-  .step-highlight { background: #FFF8E1; border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 500; color: #E65100; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
-  .contact-box { background: #E3F2FD; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
-  .contact-box h3 { font-size: 14px; font-weight: 600; color: #1565C0; margin-bottom: 6px; }
-  .contact-box p { font-size: 13px; color: #333; line-height: 1.7; }
-
-  /* 行程 */
-  .hotel-bar { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-  .itinerary { background: #fff; border: 1px solid #eee; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .day-row { display: flex; align-items: center; padding: 0.9rem 1rem; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
-  .day-row:last-child { border-bottom: none; }
-  .day-dot { width: 10px; height: 10px; border-radius: 50%; background: #E53935; margin-right: 13px; flex-shrink: 0; }
-  .day-info { flex: 1; }
-  .day-date { font-size: 14px; font-weight: 600; }
-  .day-plan { font-size: 12px; color: #888; margin-top: 2px; }
-  .day-detail { display: none; padding: 0.85rem 1rem; background: #fafafa; border-top: 1px solid #f0f0f0; }
-  .stop-block { background: #fff; border: 1px solid #eee; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
-  .stop-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-  .stop-left { flex: 1; }
-  .stop-time { font-size: 11px; color: #999; margin-bottom: 2px; }
-  .stop-name { font-size: 14px; font-weight: 600; }
-  .stop-note { font-size: 12px; color: #888; margin-top: 3px; line-height: 1.5; }
-  .stop-transport { font-size: 11px; color: #E65100; background: #FFF3E0; border-radius: 6px; padding: 3px 7px; margin-top: 5px; display: inline-block; }
-  .stop-actions { display: flex; gap: 5px; flex-shrink: 0; margin-top: 2px; flex-wrap: wrap; justify-content: flex-end; }
-  .ride-mini { display: inline-block; padding: 6px 9px; border-radius: 8px; font-size: 11px; font-weight: 500; border: 1px solid #ddd; background: #f5f5f5; color: #555; white-space: nowrap; cursor: pointer; }
-  .ride-mini.go   { background: #E3F2FD; border-color: #64B5F6; color: #1565C0; }
-  .ride-mini.back { background: #FFF8E1; border-color: #FFD54F; color: #E65100; }
-  .arrow-row { text-align: center; font-size: 13px; color: #ccc; margin: 2px 0; }
-  .tag-private { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 999px; background: #EDE7F6; color: #4527A0; margin-left: 4px; }
-  .tag-free { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 999px; background: #E0F2F1; color: #00695C; margin-left: 4px; }
-  .tag-meet { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 999px; background: #FFF3E0; color: #E65100; margin-left: 4px; }
-
-  /* 叫車 */
-  .card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-  .card p { font-size: 13px; color: #888; line-height: 1.5; margin-bottom: 10px; }
-  .cat-label { font-size: 12px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.07em; margin: 1.1rem 0 0.6rem; }
-  .input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
-  .input-label { font-size: 18px; min-width: 28px; }
-  .place-input { flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fafafa; color: #222; }
-  .swap-btn { width: 100%; padding: 9px; border-radius: 10px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #fafafa; color: #666; margin-bottom: 10px; }
-  .quick-label { font-size: 13px; color: #888; margin: 10px 0 6px; font-weight: 500; }
-  .quick-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-  .chip { display: inline-block; padding: 5px 11px; border-radius: 999px; font-size: 12px; cursor: pointer; border: 1px solid #ddd; background: #f5f5f5; color: #333; }
-  .chip.hotel-chip { background: #FCE4EC; border-color: #F48FB1; color: #880E4F; }
-  .ride-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-  .ride-app-link { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 6px; border-radius: 12px; font-size: 14px; font-weight: 600; text-decoration: none; }
-  .ride-app-link:active { opacity: 0.8; }
-  .link-grab  { background: #00B14F; color: white; }
-  .link-bolt  { background: #34C759; color: white; }
-  .link-muvmi { background: #FF6B35; color: white; }
-  .link-gmaps { background: #4285F4; color: white; grid-column: span 2; }
-
-  /* 泰語左右佈局 */
-  .custom-trans-box { background: #FFF8E1; border: 1px solid #FFE082; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
-  .custom-trans-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; margin-bottom: 8px; outline: none; }
-  .custom-trans-btn { width: 100%; padding: 10px; border-radius: 8px; background: #FFB300; color: #fff; font-weight: 600; border: none; cursor: pointer; font-size: 14px; }
-  
-  .phrase-layout { display: flex; height: 68vh; border-top: 1px solid #eee; margin-left: -1rem; margin-right: -1rem; }
-  .phrase-sidebar { width: 85px; background: #f9f9f9; overflow-y: auto; border-right: 1px solid #eee; flex-shrink: 0; }
-  .phrase-menu { padding: 14px 0; font-size: 13px; color: #666; text-align: center; cursor: pointer; position: relative; border-bottom: 1px solid #eee; }
-  .phrase-menu.active { background: #fff; color: #E53935; font-weight: 600; }
-  .phrase-menu.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #E53935; }
+  /* 泰語左右分欄 */
+  .phrase-layout { display: flex; height: 65vh; border-top: 1px solid #eee; margin: 0 -1rem; }
+  .phrase-sidebar { width: 85px; background: #f9f9f9; border-right: 1px solid #eee; overflow-y: auto; }
+  .phrase-menu { padding: 15px 5px; font-size: 13px; text-align: center; cursor: pointer; color: #666; border-bottom: 1px solid #eee; }
+  .phrase-menu.active { background: #fff; color: #E53935; font-weight: 600; border-left: 4px solid #E53935; }
   .phrase-content { flex: 1; padding: 12px; overflow-y: auto; background: #fff; }
   .phrase-list { display: none; }
   .phrase-list.active { display: block; }
-  
-  .phrase-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 0.8rem 0.9rem; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .phrase-thai { font-size: 18px; color: #E53935; font-weight: 600; margin-bottom: 4px; }
-  .phrase-zh   { font-size: 14px; color: #222; }
-  .phrase-roman{ font-size: 11px; color: #888; margin-top: 2px; margin-bottom: 8px; }
-  .sound-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .sound-btn { display: block; padding: 8px 4px; border-radius: 8px; font-size: 12px; font-weight: 500; border: 1px solid #ddd; background: #f9f9f9; color: #333; text-align: center; text-decoration: none; cursor: pointer; }
-  .sound-btn.gtrans { background: #E8F5E9; border-color: #66BB6A; color: #2E7D32; }
-  .sound-btn.speech { background: #E3F2FD; border-color: #64B5F6; color: #1565C0; }
+  .phrase-card { border: 1px solid #eee; border-radius: 10px; padding: 10px; margin-bottom: 8px; }
+  .phrase-thai { font-size: 17px; color: #E53935; font-weight: 600; }
+  .phrase-zh { font-size: 13px; margin: 4px 0; }
+  .sound-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; }
+  .sound-btn { padding: 6px; font-size: 11px; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9; cursor: pointer; }
 
-  /* 預約 */
-  .booking-btn { display: flex; align-items: center; gap: 13px; background: #fff; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 10px; border: 1px solid #eee; text-decoration: none; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .booking-btn:active { background: #fafafa; }
-  .bi { font-size: 28px; flex-shrink: 0; }
-  .bn { font-size: 15px; font-weight: 600; color: #222; }
-  .bd { font-size: 12px; color: #888; margin-top: 2px; }
-  .ba { font-size: 20px; color: #ccc; }
-  .btag { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 999px; margin-left: 5px; font-weight: 500; }
-  .btag-thai { background: #FFF3E0; color: #E65100; }
-  .btag-intl { background: #E3F2FD; color: #1565C0; }
-
-  /* 探索 */
-  .explore-hero { background: linear-gradient(135deg, #1565C0, #0D47A1); border-radius: 14px; padding: 1rem 1.2rem; color: white; margin-bottom: 12px; }
-  .explore-hero h2 { font-size: 17px; font-weight: 600; margin-bottom: 3px; }
-  .explore-hero p { font-size: 12px; opacity: 0.9; line-height: 1.5; }
-  .explore-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .explore-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 16px 8px; border-radius: 14px; text-decoration: none; border: 1px solid #eee; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  .explore-btn:active { opacity: 0.8; }
-  .explore-icon { font-size: 24px; }
-  .explore-name { font-size: 13px; font-weight: 600; color: #222; }
-  .explore-sub { font-size: 11px; color: #888; }
-  .explore-full { grid-column: span 2; flex-direction: row; justify-content: flex-start; gap: 12px; padding: 14px 16px; }
-
-  /* Toast */
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #222; color: white; padding: 10px 22px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
-  .toast.show { opacity: 1; }
-
-  /* QR Modal */
-  .qr-modal-content { text-align: center; }
-  .qr-img-box { width: 220px; height: 220px; border: 2px dashed #ddd; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; background: #fafafa; font-size: 13px; color: #aaa; overflow: hidden; }
-  .qr-img-box img { width: 100%; height: 100%; object-fit: contain; }
-  .qr-upload-btn { width: 100%; padding: 10px; border-radius: 10px; border: 1px dashed #E53935; background: #FFF5F5; color: #E53935; font-size: 14px; cursor: pointer; margin-top: 8px; }
-  #qr-file-input { display: none; }
-  .qr-info-box { background: #f8f8f8; border-radius: 10px; padding: 10px 12px; font-size: 12px; color: #666; text-align: left; line-height: 1.7; margin-top: 10px; }
-
-  .driver-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  /* 叫車 */
+  .ride-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+  .ride-input { flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fafafa; color: #222; }
+  .ride-swap-btn { width: 100%; padding: 9px; border-radius: 10px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #fafafa; color: #666; margin-bottom: 10px; }
+  .ride-chip { display: inline-block; padding: 5px 11px; border-radius: 999px; font-size: 12px; cursor: pointer; border: 1px solid #ddd; background: #f5f5f5; color: #333; margin-right: 6px; margin-bottom: 6px; }
+  .ride-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .ride-app-link { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 6px; border-radius: 12px; font-size: 14px; font-weight: 600; text-decoration: none; color: white; }
+  .link-grab  { background: #00B14F; }
+  .link-bolt  { background: #34C759; }
+  .link-muvmi { background: #FF6B35; }
+  .link-gmaps { background: #4285F4; grid-column: span 2; }
 </style>
 </head>
 <body>
-<div class="app">
 
+<div class="app">
   <div class="header">
     <div class="header-main">
       <h1>🇹🇭 曼谷旅遊助手</h1>
-      <p>5/10（日）– 5/14（四）· Hyatt Place Bangkok Sukhumvit</p>
+      <p>雲端同步版 · 密碼 0105</p>
     </div>
     <div class="rate-banner" onclick="openRateModal()">
-      <div>
-        <div class="rate-text" id="rate-display">💱 載入即時匯率中…</div>
-        <div class="rate-sub">點此換算・信用卡優惠比較・刷卡 vs 現金分析</div>
-      </div>
-      <span style="color:rgba(255,255,255,0.7);font-size:16px;">›</span>
+      <div class="rate-text" id="rate-display">💱 匯率載入中...</div>
+      <span>›</span>
     </div>
   </div>
 
   <div class="tabs">
     <div class="tab active" onclick="switchTab('airport')">✈ 機場</div>
-    <div class="tab" onclick="switchTab('itinerary')">行程</div>
+    <div class="tab" onclick="switchTab('budget')">💰 記帳</div>
     <div class="tab" onclick="switchTab('ride')">叫車</div>
     <div class="tab" onclick="switchTab('phrases')">泰語</div>
-    <div class="tab" onclick="switchTab('booking')">預約</div>
-    <div class="tab" onclick="switchTab('explore')">探索</div>
     <div class="tab" onclick="switchTab('qrzone')">🔒 票券</div>
   </div>
 
   <div id="airport" class="section active">
     <div class="pt"></div>
-    <div class="airport-hero">
-      <h2>✈ 素萬那普機場接機指南</h2>
-      <p>抵達後請按以下步驟找到接機人員，預計等待 10-15 分鐘</p>
+    <div class="budget-card">
+      <p style="font-size:14px; font-weight:600; margin-bottom:10px;">📸 機場接機指引照片</p>
+      <div style="font-size:12px; color:#666;">點擊方框上傳對應步驟的照片，系統會為您儲存。</div>
     </div>
-
-    <div class="contact-box">
-      <h3>📋 出發前資訊</h3>
-      <p>
-        ⏰ 集合時間：<strong>2026/05/10 05:50</strong><br>
-        📍 地點：桃園機場第二航廈・長榮航空 20 號後方<strong>團體櫃檯</strong><br>
-        📞 送機人員：<strong>0928-098-622</strong>（找人拿登機證）<br>
-        ✈ 航班：BR205｜桃園 09:xx → 曼谷 11:10 抵達
-      </p>
+    <div id="airport-steps">
+      <div class="budget-card">
+        <p>步驟 1: 領行李 → 出 Exit B</p>
+        <div class="airport-img-box" onclick="triggerAirportUpload(1)" id="airport-img-1"><span>📷 上傳 Exit B 照片</span></div>
+      </div>
+      <div class="budget-card">
+        <p>步驟 2: 出口向右轉</p>
+        <div class="airport-img-box" onclick="triggerAirportUpload(2)" id="airport-img-2"><span>📷 上傳右轉指標照片</span></div>
+      </div>
+      <div class="budget-card">
+        <p>步驟 3: 走到 4 號出口</p>
+        <div class="airport-img-box" onclick="triggerAirportUpload(3)" id="airport-img-3"><span>📷 上傳 4 號門照片</span></div>
+      </div>
+      <div class="budget-card">
+        <p>步驟 4: 找「Hello 你好」紅色櫃檯</p>
+        <div class="airport-img-box" onclick="triggerAirportUpload(4)" id="airport-img-4"><span>📷 上傳接機櫃檯照片</span></div>
+      </div>
+      <div class="budget-card">
+        <p>步驟 5: 出示信件拿名牌</p>
+        <div class="airport-img-box" onclick="triggerAirportUpload(5)" id="airport-img-5"><span>📷 上傳確認信範本</span></div>
+      </div>
+      <div class="budget-card">
+        <p>步驟 6: 過斑馬線到月台上車</p>
+        <div class="airport-img-box" onclick="triggerAirportUpload(6)" id="airport-img-6"><span>📷 上傳上車月台照片</span></div>
+      </div>
     </div>
-
-    <div class="step-card">
-      <div class="step-header">
-        <div class="step-num">1</div>
-        <div>
-          <div class="step-title">領行李 → 找 Exit B</div>
-          <div class="step-sub">抵達素萬那普機場後</div>
-        </div>
-      </div>
-      <div class="step-body">
-        領取行李後，直接找 <strong>「B 出口（Exit B）」</strong>，不要走其他出口。
-      </div>
-      <div class="step-highlight">🟡 黑底黃字的 B 出口招牌，很醒目</div>
-      <div class="airport-img-box" id="airport-img-1" onclick="triggerAirportUpload(1)"><span>📷 點擊上傳接機照片</span></div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-header">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-title">出 B 出口 → 向右轉</div>
-          <div class="step-sub">走出 B 出口後</div>
-        </div>
-      </div>
-      <div class="step-body">
-        出來後會看到大型黑色指示牌（含中英文），<strong>面對指標向右轉</strong>，繼續直走。
-      </div>
-      <div class="step-highlight">➡️ 看到指標，向右轉！</div>
-      <div class="airport-img-box" id="airport-img-2" onclick="triggerAirportUpload(2)"><span>📷 點擊上傳接機照片</span></div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-header">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-title">走到 4 號出口附近</div>
-          <div class="step-sub">繼續直行</div>
-        </div>
-      </div>
-      <div class="step-body">
-        沿著走道繼續直行，看到 <strong>「4 號出口」</strong> ของ圓形黃色標誌，繼續直行不要出去。
-      </div>
-      <div class="step-highlight">🟡 看到圓形黃底「4」號標誌，繼續直行</div>
-      <div class="airport-img-box" id="airport-img-3" onclick="triggerAirportUpload(3)"><span>📷 點擊上傳接機照片</span></div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-header">
-        <div class="step-num">4</div>
-        <div>
-          <div class="step-title">找「Hello 你好」紅色標誌</div>
-          <div class="step-sub">在 4 號門旁的接機圍欄</div>
-        </div>
-      </div>
-      <div class="step-body">
-        在 4 號門旁有大量接機牌的圍欄，找 <strong>紅底白字的「你好 HELLO」</strong> 標誌，就是接機服務台。
-      </div>
-      <div class="step-highlight">🔴 找紅色「你好 HELLO」牌子</div>
-      <div class="airport-img-box" id="airport-img-4" onclick="triggerAirportUpload(4)"><span>📷 點擊上傳接機照片</span></div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-header">
-        <div class="step-num">5</div>
-        <div>
-          <div class="step-title">出示確認信 → 拿名牌</div>
-          <div class="step-sub">在服務台前</div>
-        </div>
-      </div>
-      <div class="step-body">
-        向工作人員出示 <strong>Booking Confirmation（訂購確認信）</strong>，核對後會給你一張印有你名字的確認單，然後在原地等待 <strong>10-15 分鐘</strong>。
-      </div>
-      <div class="step-highlight">📄 出示確認信 → 等待工作人員叫你</div>
-      <div class="airport-img-box" id="airport-img-5" onclick="triggerAirportUpload(5)"><span>📷 點擊上傳接機照片</span></div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-header">
-        <div class="step-num">6</div>
-        <div>
-          <div class="step-title">過 4 號門 → 走斑馬線上車</div>
-          <div class="step-sub">車輛抵達時</div>
-        </div>
-      </div>
-      <div class="step-body">
-        工作人員通知後，走過 <strong>4 號出口的大門</strong>，再穿過 <strong>紅白斑馬線到中間月台</strong>，在月台等待接送車輛到來。
-      </div>
-      <div class="step-highlight">🚐 過斑馬線到中間月台，等車上車！</div>
-      <div class="airport-img-box" id="airport-img-6" onclick="triggerAirportUpload(6)"><span>📷 點擊上傳接機照片</span></div>
-    </div>
-   
-    <div style="background:#E8F5E9;border-radius:12px;padding:12px 14px;font-size:13px;color:#2E7D32;line-height:1.7;margin-top:4px;">
-      ✅ <strong>重點整理：</strong><br>
-      行李 → B出口 → 右轉 → 直行 → 4號門旁 → 找「你好HELLO」→ 出示確認信 → 等叫 → 過斑馬線上車
-    </div>
-
     <input type="file" id="airport-file-input" accept="image/*" onchange="handleAirportUpload(event)" style="display:none;">
   </div>
 
-  <div id="itinerary" class="section">
+  <div id="budget" class="section">
     <div class="pt"></div>
-    <div class="hotel-bar">
-      <span style="font-size:20px;">🏨</span>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#1565C0;">Hyatt Place Bangkok Sukhumvit</div>
-        <div style="font-size:11px;color:#888;">2 Sukhumvit Soi 13 · BTS Nana 站</div>
-      </div>
+    <div class="summary-box">
+      <div style="font-size:12px; color:#666;">累積消費預算</div>
+      <div class="summary-val" id="total-spent">฿ 0</div>
+      <div style="font-size:11px; color:#999;" id="total-twd">≈ NT$ 0</div>
     </div>
-    <div class="cat-label" style="margin-top:0">5月行程總覽</div>
-    <div class="itinerary">
-      <div class="day-row" onclick="toggleDay('d1')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 1 · 5/10（日）</div><div class="day-plan">落地首戰 · 恰圖洽 · 朱拉美食街</div></div><span id="d1-arrow">›</span></div>
-      <div id="d1" class="day-detail">
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">11:10</div><div class="stop-name">素萬那普機場抵達</div><div class="stop-note">→ 按機場接機流程找接機人員</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Suvarnabhumi Airport, Bang Phli',HOTEL_ADDR)">🚕 往飯店</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">12:20</div><div class="stop-name">Hyatt Place Bangkok Sukhumvit</div><div class="stop-note">寄放行李，輕裝出發</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">13:48</div><div class="stop-name">恰圖洽週末市集 <span class="tag-free">週日限定</span></div><div class="stop-note">把握週日黃金時間盡情挖寶</div><div class="stop-transport">🚈 BTS Phrom Phong → Mo Chit（淺綠線）</div></div><div class="stop-actions"><button class="ride-mini back" onclick="fillAndRide('Chatuchak Weekend Market, Kamphaeng Phet 2 Rd',HOTEL_ADDR)">🏠 回</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">17:30</div><div class="stop-name">朱拉隆功區</div><div class="stop-note">從恰圖洽叫車前往</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Chatuchak Weekend Market','Chulalongkorn Area, Bangkok')">🚕 出發</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">18:30</div><div class="stop-name">朱ら 50 巷廚房</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">19:30</div><div class="stop-name">朱拉隆功夜市（Banthat Thong）</div><div class="stop-note">散步消食</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">21:30</div><div class="stop-name">Nature Thai Massage Soi 24</div><div class="stop-transport">🚕 從朱拉商圈叫車至蘇坤蔚 24 巷</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Chulalongkorn Area, Bangkok','Sukhumvit Soi 24, Bangkok')">🚕 出發</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">23:27</div><div class="stop-name">回飯店休息</div><div class="stop-note">🚶 從按摩店步行回飯店</div></div></div>
+
+    <div class="budget-card">
+      <input type="text" id="exp-item" class="budget-input" placeholder="消費項目 (如：建興酒家)">
+      <input type="number" id="exp-amount" class="budget-input" placeholder="泰銖金額 (THB)">
+      <button class="budget-btn" onclick="addExpense()">➕ 存入雲端帳本</button>
+    </div>
+
+    <div class="budget-card">
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+        <span style="font-weight:600;">🧾 消費明細</span>
+        <span style="font-size:11px; color:#4285F4; cursor:pointer;" onclick="fetchExpenses()">🔄 重新整理</span>
       </div>
-      <div class="day-row" onclick="toggleDay('d2')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 2 · 5/11（一）</div><div class="day-plan">大城遠征 · 獅子動物園 · Save One Go 夜市</div></div><span id="d2-arrow">›</span></div>
-      <div id="d2" class="day-detail">
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">08:00</div><div class="stop-name">飯店出發前往大城 <span class="tag-private">私人包車全日</span></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">10:30</div><div class="stop-name">大城獅子王動物園</div><div class="stop-note">吉普車長頸鹿合照 · 牽老虎散步</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">12:30</div><div class="stop-name">大城中央蝦市場</div><div class="stop-note">買糖絲春捲</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">13:45</div><div class="stop-name">瑪哈泰寺（Wat Mahathat）</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">14:45</div><div class="stop-name">柴瓦塔那蘭寺 + 泰服拍照</div><div class="stop-note">有帥氣褲裝款式可選</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">15:45</div><div class="stop-name">KlongSrabua 船麵餐廳</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">16:30</div><div class="stop-name">長尾船護城河 · 大象戲水</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">18:00</div><div class="stop-name">Save One Go Market <span class="tag-meet">包車在此結束</span></div><div class="stop-transport">🚈 BTS Yaek Kor Por Aor → Phrom Phong（淺綠線）</div></div><div class="stop-actions"><button class="ride-mini back" onclick="fillAndRide('Save One Go Night Market, Bang Na',HOTEL_ADDR)">🏠 回飯店</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">21:30</div><div class="stop-name">飯店周邊足部按摩</div><div class="stop-note">隨機挑選評價好的店</div></div></div>
-      </div>
-      <div class="day-row" onclick="toggleDay('d3')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 3 · 5/12（二）</div><div class="day-plan">侏羅紀 · ICONSIAM · 海鮮自助餐</div></div><span id="d3-arrow">›</span></div>
-      <div id="d3" class="day-detail">
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">10:00</div><div class="stop-name">睡到自然醒 😴</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">12:00</div><div class="stop-name">侏羅紀世界展覽（Asiatique 河濱碼頭）</div><div class="stop-note">門票已購，直接前往</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide(HOTEL_ADDR,'Asiatique The Riverfront, Charoen Krung Rd')">🚕 出發</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">13:30</div><div class="stop-name">ICONSIAM</div><div class="stop-note">⛴️ 在 Asiatique 碼頭搭河岸接駁船前往</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">13:50</div><div class="stop-name">ICONSIAM 逛街 · 室內水上市場</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">18:37</div><div class="stop-name">After You Dessert Café（ICONSIAM 店）</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">20:30</div><div class="stop-name">Kodtalay Seafood Buffet（RCA）</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('ICONSIAM, Charoen Nakhon Rd','Kodtalay Seafood Buffet, RCA, Bangkok')">🚕 出發</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">22:45</div><div class="stop-name">新喬德夜市 JODD FAIRS Ratchada</div></div><div class="stop-actions"><button class="ride-mini back" onclick="fillAndRide('Jodd Fairs Night Market, Ratchadaphisek Rd',HOTEL_ADDR)">🏠 回飯店</button></div></div></div>
-      </div>
-      <div class="day-row" onclick="toggleDay('d4')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 4 · 5/13（三）</div><div class="day-plan">臘腸狗咖啡廳 · POP MART · 百貨採買</div></div><span id="d4-arrow">›</span></div>
-      <div id="d4" class="day-detail">
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">09:30</div><div class="stop-name">飯店叫外送 🛵</div><div class="stop-note">用 Grab Food 點 Phed Mark 打拋豬至飯店享用</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">11:00</div><div class="stop-name">BENKOFF 臘腸狗咖啡廳</div><div class="stop-transport">🚈 BTS Phrom Phong → Thong Lo（一站）</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">12:30</div><div class="stop-name">Hirono Floating Market（Siam Square）</div><div class="stop-transport">🚈 BTS Thong Lo → Siam・尋找小野限定店</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">13:30</div><div class="stop-name">Central World · POP MART 旗艦店</div><div class="stop-note">🚶 從 Siam Square 走空橋前往</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">18:30</div><div class="stop-name">Savoey（Mercury Ville 分店）</div><div class="stop-note">🚶 步行至 BTS Chit Lom 站旁商場</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">20:30</div><div class="stop-name">Big C Ratchadamri 伴手禮採買</div><div class="stop-note">🚶 晚餐後步行至對面</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">22:00</div><div class="stop-name">Makkha Health & Spa（Sukhumvit 24）</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide('Big C Ratchadamri, Bangkok','Makkha Health Spa, Sukhumvit Soi 24')">🚕 出發</button></div></div></div>
-      </div>
-      <div class="day-row" onclick="toggleDay('d5')"><div class="day-dot"></div><div class="day-info"><div class="day-date">Day 5 · 5/14（四）</div><div class="day-plan">平安回程</div></div><span id="d5-arrow">›</span></div>
-      <div id="d5" class="day-detail">
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">08:30</div><div class="stop-name">飯店退房</div><div class="stop-note">做最後行李打包</div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-header"><div class="stop-left"><div class="stop-time">08:30</div><div class="stop-name">前往素萬那普機場</div><div class="stop-note">⚑ 曼谷市區易塞車，務必準時出發！</div></div><div class="stop-actions"><button class="ride-mini go" onclick="fillAndRide(HOTEL_ADDR,'Suvarnabhumi Airport, Bang Phli')">🚕 叫車</button></div></div></div>
-        <div class="arrow-row">↓</div>
-        <div class="stop-block"><div class="stop-left"><div class="stop-time">12:25</div><div class="stop-name">BR206 曼谷→桃園</div><div class="stop-note">帶著滿滿戰利品平安回台 🎉</div></div></div>
+      <div id="expense-list" class="budget-list">
+        <p style="text-align:center; color:#ccc; padding:20px;">載入中...</p>
       </div>
     </div>
   </div>
 
   <div id="ride" class="section">
     <div class="pt"></div>
-    <div class="card">
-      <h3>🗺 彈性叫車</h3>
-      <p>填入起終點，一鍵開啟 App</p>
-      <div class="input-row"><span class="input-label">🔴</span><input class="place-input" id="from-input" placeholder="起點" /></div>
-      <div class="input-row"><span class="input-label">🟢</span><input class="place-input" id="to-input" placeholder="終點" /></div>
-      <button class="swap-btn" onclick="swapPlaces()">⇅ 對調起點 / 終點</button>
-      <div class="quick-label">飯店（已固定）</div>
-      <div class="quick-chips">
-        <span class="chip hotel-chip" onclick="fillPlace('from',HOTEL_ADDR)">🏨 飯店 → 起點</span>
-        <span class="chip hotel-chip" onclick="fillPlace('to',HOTEL_ADDR)">🏨 飯店 → 終點</span>
+    <div class="budget-card">
+      <h3 style="margin-bottom:10px; font-size:16px;">🗺 彈性叫車</h3>
+      <p style="font-size:13px; color:#888; margin-bottom:10px;">填入起終點，一鍵開啟 App</p>
+      <div class="ride-input-row"><span>🔴</span><input class="ride-input" id="from-input" placeholder="起點" /></div>
+      <div class="ride-input-row"><span>🟢</span><input class="ride-input" id="to-input" placeholder="終點" /></div>
+      <button class="ride-swap-btn" onclick="swapPlaces()">⇅ 對調起點 / 終點</button>
+      
+      <div style="font-size:13px; color:#888; margin:10px 0 6px; font-weight:500;">快捷地點</div>
+      <div>
+        <span class="ride-chip" onclick="fillPlace('from', HOTEL_ADDR)">🏨 飯店 → 起點</span>
+        <span class="ride-chip" onclick="fillPlace('to', HOTEL_ADDR)">🏨 飯店 → 終點</span>
+        <span class="ride-chip" onclick="fillPlace('to','Suvarnabhumi Airport, Bang Phli')">✈ 機場</span>
+        <span class="ride-chip" onclick="fillPlace('to','Chatuchak Weekend Market')">恰圖洽</span>
+        <span class="ride-chip" onclick="fillPlace('to','ICONSIAM, Charoen Nakhon Rd')">ICONSIAM</span>
+        <span class="ride-chip" onclick="fillPlace('to','Jodd Fairs Night Market')">喬德夜市</span>
+        <span class="ride-chip" onclick="fillPlace('to','Central World, Ratchadamri Rd')">Central World</span>
+        <span class="ride-chip" onclick="fillPlace('to','Big C Ratchadamri, Bangkok')">Big C</span>
       </div>
-      <div class="quick-label">行程景點</div>
-      <div class="quick-chips">
-        <span class="chip" onclick="fillPlace('to','Suvarnabhumi Airport, Bang Phli')">✈ 機場</span>
-        <span class="chip" onclick="fillPlace('to','Chatuchak Weekend Market, Kamphaeng Phet 2 Rd')">恰圖洽</span>
-        <span class="chip" onclick="fillPlace('to','Asiatique The Riverfront, Charoen Krung Rd')">Asiatique</span>
-        <span class="chip" onclick="fillPlace('to','ICONSIAM, Charoen Nakhon Rd')">ICONSIAM</span>
-        <span class="chip" onclick="fillPlace('to','Jodd Fairs Night Market, Ratchadaphisek Rd')">喬德夜市</span>
-        <span class="chip" onclick="fillPlace('to','Save One Go Night Market, Bang Na')">Save One Go</span>
-        <span class="chip" onclick="fillPlace('to','Central World, Ratchadamri Rd')">Central World</span>
-        <span class="chip" onclick="fillPlace('to','Big C Ratchadamri, Bangkok')">Big C</span>
-      </div>
+      
       <div class="ride-app-grid">
-        <a class="ride-app-link link-grab" href="grab://" onclick="updateLink(event,'grab')">🟢 Grab</a>
-        <a class="ride-app-link link-bolt" href="taxify://" onclick="updateLink(event,'bolt')">⚡ Bolt</a>
-        <a class="ride-app-link link-muvmi" href="muvmi://" onclick="updateLink(event,'muvmi')">🛺 MuvMi</a>
+        <a class="ride-app-link link-grab" href="#" onclick="updateLink(event,'grab')">🟢 Grab</a>
+        <a class="ride-app-link link-bolt" href="#" onclick="updateLink(event,'bolt')">⚡ Bolt</a>
+        <a class="ride-app-link link-muvmi" href="#" onclick="updateLink(event,'muvmi')">🛺 MuvMi</a>
         <a class="ride-app-link link-gmaps" href="#" onclick="updateLink(event,'gmaps')">📍 Google Maps 導航</a>
       </div>
-    </div>
-    <div class="driver-card">
-      <div class="cat-label" style="margin-top:0">司機泰語對話卡</div>
-      <div class="phrase-card" style="margin-bottom:10px;"><div class="phrase-thai">ไปที่นี่ครับ/ค่ะ</div><div class="phrase-zh">我要去這裡</div><div class="phrase-roman">Pai thîi nîi khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไปที่นี่ครับ&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('ไปที่นี่ครับ')">🔊 裝置發音</button></div></div>
-      <div class="phrase-card" style="margin-bottom:10px;"><div class="phrase-thai">จอดที่นี่ได้เลยครับ/ค่ะ</div><div class="phrase-zh">就停這裡就好</div><div class="phrase-roman">Jòot thîi nîi dâi loei khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=จอดที่นี่ได้เลยครับ&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('จอดที่นี่ได้เลยครับ')">🔊 裝置發音</button></div></div>
-      <div class="phrase-card" style="margin-bottom:0;"><div class="phrase-thai">เปิดแอร์หน่อยได้ไหมครับ/ค่ะ</div><div class="phrase-zh">可以開冷氣嗎？</div><div class="phrase-roman">Pôet ae nòi dâi mǎi khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เปิดแอร์หน่อยได้ไหมครับ&op=translate">🔗 Google 翻譯</a><button class="sound-btn speech" onclick="tts('เปิดแอร์หน่อยได้ไหมครับ')">🔊 裝置發音</button></div></div>
     </div>
   </div>
 
   <div id="phrases" class="section">
     <div class="pt"></div>
-    
-    <div class="custom-trans-box">
-      <div style="font-size:13px; font-weight:600; color:#F57F17; margin-bottom:6px;">✍️ 自訂翻譯</div>
-      <input type="text" id="custom-zh-input" class="custom-trans-input" placeholder="輸入中文，例如：我要去機場">
-      <button class="custom-trans-btn" onclick="doCustomTranslate()">🔗 Google 翻譯成泰文</button>
+    <div style="background:#FFF8E1; padding:10px; border-radius:10px; margin-bottom:10px;">
+      <input type="text" id="custom-zh" placeholder="輸入中文自訂翻譯..." style="width:73%; padding:8px; border:1px solid #ddd; border-radius:5px;">
+      <button onclick="doTranslate()" style="width:23%; padding:8px; background:#FFB300; border:none; border-radius:5px; color:white;">翻譯</button>
     </div>
-
+    
     <div class="phrase-layout">
       <div class="phrase-sidebar">
-        <div class="phrase-menu active" id="menu-hotel" onclick="switchPhraseCat('hotel')">🏨 飯店</div>
-        <div class="phrase-menu" id="menu-night" onclick="switchPhraseCat('night')">🎪 夜市</div>
-        <div class="phrase-menu" id="menu-food" onclick="switchPhraseCat('food')">🍽 餐廳</div>
-        <div class="phrase-menu" id="menu-mall" onclick="switchPhraseCat('mall')">🛍 百貨</div>
-        <div class="phrase-menu" id="menu-sos" onclick="switchPhraseCat('sos')">🚨 緊急</div>
+        <div class="phrase-menu active" onclick="switchPhrase('hotel', this)">🏨 飯店</div>
+        <div class="phrase-menu" onclick="switchPhrase('night', this)">🎪 夜市</div>
+        <div class="phrase-menu" onclick="switchPhrase('food', this)">🍽 餐廳</div>
+        <div class="phrase-menu" onclick="switchPhrase('mall', this)">🛍 百貨</div>
+        <div class="phrase-menu" onclick="switchPhrase('sos', this)">🚨 緊急</div>
       </div>
-      
-      <div class="phrase-content">
-        <div class="phrase-list active" id="list-hotel">
-          <div class="phrase-card"><div class="phrase-thai">เช็คอินครับ/ค่ะ</div><div class="phrase-zh">我要辦理入住</div><div class="phrase-roman">Chék-in khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เช็คอินครับ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เช็คอินครับ')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">เช็คเอาท์ครับ/ค่ะ</div><div class="phrase-zh">我要退房</div><div class="phrase-roman">Chék-àut khráp / khâ</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เช็คเอาท์ครับ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เช็คเอาท์ครับ')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ห้องของฉันอยู่ที่ไหน</div><div class="phrase-zh">我的房間在哪裡？</div><div class="phrase-roman">Hông khǒng chǎn yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห้องของฉันอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ห้องของฉันอยู่ที่ไหน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ขอฝากกระเป๋าไว้ก่อนได้ไหม</div><div class="phrase-zh">可以寄放行李嗎？</div><div class="phrase-roman">Khǒo fàak kra-pǎo wái kòon dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอฝากกระเป๋าไว้ก่อนได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอฝากกระเป๋าไว้ก่อนได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">อินเทอร์เน็ตรหัสผ่านคืออะไร</div><div class="phrase-zh">Wifi 密碼是什麼？</div><div class="phrase-roman">In-thoe-nét ra-hát phàan khue a-rai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อินเทอร์เน็ตรหัสผ่านคืออะไร&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อินเทอร์เน็ตรหัสผ่านคืออะไร')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">แอร์ไม่เย็น ช่วยซ่อมได้ไหม</div><div class="phrase-zh">冷氣不冷，可以修嗎？</div><div class="phrase-roman">Ae mâi yen, chûay sôm dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แอร์ไม่เย็น ช่วยซ่อมได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แอร์ไม่เย็น ช่วยซ่อมได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ช่วยทำความสะอาดห้องหน่อย</div><div class="phrase-zh">請幫我打掃房間</div><div class="phrase-roman">Chûay tham khwaam sa-àat hông nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยทำความสะอาดห้องหน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยทำความสะอาดห้องหน่อย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ขอผ้าเช็ดตัวเพิ่มได้ไหม</div><div class="phrase-zh">可以多給我毛巾嗎？</div><div class="phrase-roman">Khǒo phâa chét tua phôem dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอผ้าเช็ดตัวเพิ่มได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอผ้าเช็ดตัวเพิ่มได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">อาหารเช้าเริ่มกี่โมง</div><div class="phrase-zh">早餐幾點開始？</div><div class="phrase-roman">Aa-hǎan cháo rôem kìi moong</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อาหารเช้าเริ่มกี่โมง&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อาหารเช้าเริ่มกี่โมง')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ช่วยเรียกแท็กซี่หน่อย</div><div class="phrase-zh">請幫我叫計程車</div><div class="phrase-roman">Chûay rîak tháek-sîi nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยเรียกแท็กซี่หน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยเรียกแท็กซี่หน่อย')">🔊 發音</button></div></div>
+      <div class="phrase-content" id="phrase-list-container">
         </div>
-        
-        <div class="phrase-list" id="list-night">
-          <div class="phrase-card"><div class="phrase-thai">ราคาเท่าไหร่</div><div class="phrase-zh">多少錢？</div><div class="phrase-roman">Raa-khaa thâo-rài</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ราคาเท่าไหร่&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ราคาเท่าไหร่')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ลดราคาได้ไหม</div><div class="phrase-zh">可以便宜一點嗎？</div><div class="phrase-roman">Lót raa-khaa dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลดราคาได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ลดราคาได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">เอาอันนี้</div><div class="phrase-zh">我要這個</div><div class="phrase-roman">Ao an níi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เอาอันนี้&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เอาอันนี้')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">สแกน QR ได้ไหม</div><div class="phrase-zh">可以掃 QR Code 嗎？</div><div class="phrase-roman">Sa-gaen QR dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สแกน QR ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สแกน QR ได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ขอรับเงินทอนด้วย</div><div class="phrase-zh">請找零錢</div><div class="phrase-roman">Khǒo ráp ngoen thoon dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอรับเงินทอนด้วย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอรับเงินทอนด้วย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ห้องน้ำอยู่ที่ไหน</div><div class="phrase-zh">廁所在哪裡？</div><div class="phrase-roman">Hông nám yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห้องน้ำอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ห้องน้ำอยู่ที่ไหน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">แพงไป</div><div class="phrase-zh">太貴了</div><div class="phrase-roman">Phaeng pai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แพงไป&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แพงไป')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">มีสีอื่นไหม</div><div class="phrase-zh">有其他顏色嗎？</div><div class="phrase-roman">Mii sǐi ùen mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีสีอื่นไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีสีอื่นไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ลองใส่ได้ไหม</div><div class="phrase-zh">可以試穿嗎？</div><div class="phrase-roman">Loong sài dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลองใส่ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ลองใส่ได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ไม่เอาถุงพลาสติก</div><div class="phrase-zh">不要塑膠袋</div><div class="phrase-roman">Mâi ao thǔng phlát-sa-tìk</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่เอาถุงพลาสติก&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่เอาถุงพลาสติก')">🔊 發音</button></div></div>
-        </div>
-
-        <div class="phrase-list" id="list-food">
-          <div class="phrase-card"><div class="phrase-thai">สองท่าน</div><div class="phrase-zh">兩位</div><div class="phrase-roman">Sǒong thâan</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สองท่าน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สองท่าน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">สั่งอาหารหน่อย</div><div class="phrase-zh">我要點餐</div><div class="phrase-roman">Sàng aa-hǎan nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สั่งอาหารหน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สั่งอาหารหน่อย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">มีเมนูภาษาจีนไหม</div><div class="phrase-zh">有中文菜單嗎？</div><div class="phrase-roman">Mii mee-nuu phaa-sǎa jiin mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีเมนูภาษาจีนไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีเมนูภาษาจีนไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ไม่เผ็ด</div><div class="phrase-zh">不辣</div><div class="phrase-roman">Mâi phèt</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่เผ็ด&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่เผ็ด')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ไม่ใส่ผักชี</div><div class="phrase-zh">不要加香菜</div><div class="phrase-roman">Mâi sài phàk-chii</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ไม่ใส่ผักชี&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ไม่ใส่ผักชี')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">แพ้อาหารทะเล</div><div class="phrase-zh">我對海鮮過敏</div><div class="phrase-roman">Pháe aa-hǎan tha-lee</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แพ้อาหารทะเล&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แพ้อาหารทะเล')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">อร่อยมากครับ</div><div class="phrase-zh">非常好吃</div><div class="phrase-roman">A-ròi mâak khráp</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อร่อยมากครับ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อร่อยมากครับ')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">เก็บเงินด้วย</div><div class="phrase-zh">買單！</div><div class="phrase-roman">Kèp ngoen dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=เก็บเงินด้วย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('เก็บเงินด้วย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ห่อกลับบ้านได้ไหม</div><div class="phrase-zh">可以外帶嗎？</div><div class="phrase-roman">Hòo klàp bâan dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ห่อกลับบ้านได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ห่อกลับบ้านได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">มีน้ำเปล่าไหม</div><div class="phrase-zh">有白開水嗎？</div><div class="phrase-roman">Mii nám plào mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีน้ำเปล่าไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีน้ำเปล่าไหม')">🔊 發音</button></div></div>
-        </div>
-
-        <div class="phrase-list" id="list-mall">
-          <div class="phrase-card"><div class="phrase-thai">ซุปเปอร์มาร์เก็ตอยู่ที่ไหน</div><div class="phrase-zh">超市在哪裡？</div><div class="phrase-roman">Súp-pôe-maa-két yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ซุปเปอร์มาร์เก็ตอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ซุปเปอร์มาร์เก็ตอยู่ที่ไหน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ทำ VAT Refund ได้ไหม</div><div class="phrase-zh">可以退稅嗎？</div><div class="phrase-roman">Tham VAT Refund dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ทำ VAT Refund ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ทำ VAT Refund ได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">มีส่วนลดไหม</div><div class="phrase-zh">有打折嗎？</div><div class="phrase-roman">Mii sùan lót mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีส่วนลดไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีส่วนลดไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">รูดบัตรได้ไหม</div><div class="phrase-zh">可以刷卡嗎？</div><div class="phrase-roman">Rûut bàt dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=รูดบัตรได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('รูดบัตรได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ขอดูต่อน</div><div class="phrase-zh">我只是看看</div><div class="phrase-roman">Khǒo duu kòon</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอดูต่อน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอดูต่อน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ซื้ออันนี้</div><div class="phrase-zh">我要買這個</div><div class="phrase-roman">Súe an níi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ซื้ออันนี้&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ซื้ออันนี้')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ลิฟต์อยู่ที่ไหน</div><div class="phrase-zh">電梯在哪裡？</div><div class="phrase-roman">Líp yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ลิฟต์อยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ลิฟต์อยู่ที่ไหน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">มีของใหม่ไหม</div><div class="phrase-zh">有全新的嗎？</div><div class="phrase-roman">Mii khǒong mài mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=มีของใหม่ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('มีของใหม่ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">อันนี้มีรับประกันไหม</div><div class="phrase-zh">這個有保固嗎？</div><div class="phrase-roman">An níi mii ráp pra-kan mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=อันนี้มีรับประกันไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('อันนี้มีรับประกันไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">แลกเงินได้ที่ไหน</div><div class="phrase-zh">哪裡可以換錢？</div><div class="phrase-roman">Lâek ngoen dâi thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=แลกเงินได้ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('แลกเงินได้ที่ไหน')">🔊 發音</button></div></div>
-        </div>
-
-        <div class="phrase-list" id="list-sos">
-          <div class="phrase-card"><div class="phrase-thai">ช่วยด้วย</div><div class="phrase-zh">救命！</div><div class="phrase-roman">Chûay dûay</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยด้วย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยด้วย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ฉันหลงทาง</div><div class="phrase-zh">我迷路了</div><div class="phrase-roman">Chǎn lǒng thaang</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ฉันหลงทาง&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ฉันหลงทาง')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">โรงพยาบาลอยู่ที่ไหน</div><div class="phrase-zh">哪裡有醫院？</div><div class="phrase-roman">Roong-pha-yaa-baan yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=โรงพยาบาลอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('โรงพยาบาลอยู่ที่ไหน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ฉันไม่สบาย</div><div class="phrase-zh">我生病了</div><div class="phrase-roman">Chǎn mâi sa-baai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ฉันไม่สบาย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ฉันไม่สบาย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ช่วยเรียกตำรวจหน่อย</div><div class="phrase-zh">請幫我叫警察</div><div class="phrase-roman">Chûay rîak tam-rùat nòi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ช่วยเรียกตำรวจหน่อย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ช่วยเรียกตำรวจหน่อย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">กระเป๋าสตางค์หาย</div><div class="phrase-zh">我的錢包不見了</div><div class="phrase-roman">Kra-pǎo taang haai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=กระเป๋าสตางค์หาย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('กระเป๋าสตางค์หาย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">พาสปอร์ตหาย</div><div class="phrase-zh">護照不見了</div><div class="phrase-roman">Phát-sa-pòot haai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=พาสปอร์ตหาย&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('พาสปอร์ตหาย')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">สถานทูตอยู่ที่ไหน</div><div class="phrase-zh">請問大使館在哪？</div><div class="phrase-roman">Sa-thǎan-thûut yùu thîi nǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=สถานทูตอยู่ที่ไหน&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('สถานทูตอยู่ที่ไหน')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ขอใช้โทรศัพท์ได้ไหม</div><div class="phrase-zh">可以借打電話嗎？</div><div class="phrase-roman">Khǒo yûem thoo-ra-sàp dâi mǎi</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ขอใช้โทรศัพท์ได้ไหม&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ขอใช้โทรศัพท์ได้ไหม')">🔊 發音</button></div></div>
-          <div class="phrase-card"><div class="phrase-thai">ฟังไม่เข้าใจ</div><div class="phrase-zh">我聽不懂</div><div class="phrase-roman">Fang mâi khâo-jai</div><div class="sound-row"><a class="sound-btn gtrans" href="https://translate.google.com/?sl=th&tl=zh-TW&text=ฟังไม่เข้าใจ&op=translate">🔗 翻譯</a><button class="sound-btn speech" onclick="tts('ฟังไม่เข้าใจ')">🔊 發音</button></div></div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div id="booking" class="section">
-    <div class="pt"></div>
-    <a class="booking-btn" href="queq://open" onclick="handleBooking(event,'queq://open','https://queq.in.th')">
-      <div class="bi">🎟</div><div style="flex:1"><div class="bn">QuePai（QueQ）<span class="btag btag-thai">泰國本地</span></div><div class="bd">線上抽號碼牌・搜尋附近餐廳</div></div><div class="ba">›</div>
-    </a>
-    <a class="booking-btn" href="eatigo://open" onclick="handleBooking(event,'eatigo://open','https://eatigo.com/en/regions/28')">
-      <div class="bi">🍽</div><div style="flex:1"><div class="bn">Eatigo<span class="btag btag-intl">訂位 + 折扣</span></div><div class="bd">東南亞最大訂位平台・最高 5 折</div></div><div class="ba">›</div>
-    </a>
-    <a class="booking-btn" href="chope://open" onclick="handleBooking(event,'chope://open','https://www.chope.co/bangkok-restaurants?lang=en_US')">
-      <div class="bi">📅</div><div style="flex:1"><div class="bn">Chope<span class="btag btag-intl">即時訂位</span></div><div class="bd">亞洲連鎖訂位・英文介面友善</div></div><div class="ba">›</div>
-    </a>
-  </div>
-
-  <div id="explore" class="section">
-    <div class="pt"></div>
-    <div class="explore-hero">
-      <h2>🗺 探索周邊</h2>
-      <p>一鍵搜尋你當下位置附近的美食、景點、按摩推薦</p>
-    </div>
-    <div class="explore-grid">
-      <a class="explore-btn" href="https://www.wongnai.com/restaurants/nearby" target="_blank"><span class="explore-icon">🍜</span><span class="explore-name">Wongnai 附近</span><span class="explore-sub">泰國最大美食評論</span></a>
-      <a class="explore-btn" href="https://www.google.com/maps/search/restaurant+near+me" target="_blank"><span class="explore-icon">🍽</span><span class="explore-name">附近餐廳</span><span class="explore-sub">Google Maps</span></a>
-      <a class="explore-btn" href="https://www.wongnai.com/restaurants/search?query=massage" target="_blank"><span class="explore-icon">💆</span><span class="explore-name">附近按摩</span><span class="explore-sub">Wongnai 評分</span></a>
-      <a class="explore-btn" href="https://www.google.com/maps/search/massage+near+me" target="_blank"><span class="explore-icon">🛁</span><span class="explore-name">附近按摩</span><span class="explore-sub">Google Maps</span></a>
-      <a class="explore-btn" href="https://www.google.com/maps/search/cafe+near+me" target="_blank"><span class="explore-icon">☕</span><span class="explore-name">附近咖啡廳</span><span class="explore-sub">Google Maps</span></a>
-      <a class="explore-btn" href="https://www.google.com/maps/search/attractions+near+me" target="_blank"><span class="explore-icon">🏛</span><span class="explore-name">附近景點</span><span class="explore-sub">Google Maps</span></a>
-      <a class="explore-btn explore-full" href="https://www.wongnai.com" target="_blank"><span class="explore-icon">🌐</span><div><div class="explore-name">Wongnai 完整網站</div><div class="explore-sub">泰國最大美食評論・訂位平台（類似台灣愛食記）</div></div></a>
     </div>
   </div>
 
   <div id="qrzone" class="section">
     <div class="pt"></div>
     <div id="qr-lock" class="lock-screen">
-      <div class="lock-icon">🔐</div>
-      <div class="lock-title">票券專區</div>
-      <div class="lock-sub">請輸入 4 位數 PIN 碼解鎖<br>僅你自己可見</div>
+      <p>🔐 請輸入密碼解鎖</p>
       <div class="pin-dots" id="pin-dots">
-        <div class="pin-dot" id="dot-0"></div>
-        <div class="pin-dot" id="dot-1"></div>
-        <div class="pin-dot" id="dot-2"></div>
-        <div class="pin-dot" id="dot-3"></div>
+        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
       </div>
       <div class="pin-pad">
-        <button class="pin-key" onclick="pinInput('1')">1</button>
-        <button class="pin-key" onclick="pinInput('2')">2</button>
-        <button class="pin-key" onclick="pinInput('3')">3</button>
-        <button class="pin-key" onclick="pinInput('4')">4</button>
-        <button class="pin-key" onclick="pinInput('5')">5</button>
-        <button class="pin-key" onclick="pinInput('6')">6</button>
-        <button class="pin-key" onclick="pinInput('7')">7</button>
-        <button class="pin-key" onclick="pinInput('8')">8</button>
-        <button class="pin-key" onclick="pinInput('9')">9</button>
-        <button class="pin-key del" onclick="pinInput('0')">0</button>
-        <button class="pin-key del" onclick="pinDelete()">⌫</button>
-        <button class="pin-key del" onclick="pinClear()">✕</button>
+        <button class="pin-key" onclick="pinIn('1')">1</button><button class="pin-key" onclick="pinIn('2')">2</button><button class="pin-key" onclick="pinIn('3')">3</button>
+        <button class="pin-key" onclick="pinIn('4')">4</button><button class="pin-key" onclick="pinIn('5')">5</button><button class="pin-key" onclick="pinIn('6')">6</button>
+        <button class="pin-key" onclick="pinIn('7')">7</button><button class="pin-key" onclick="pinIn('8')">8</button><button class="pin-key" onclick="pinIn('9')">9</button>
+        <button class="pin-key" onclick="pinIn('0')">0</button><button class="pin-key" style="font-size:14px;" onclick="pinDel()">⌫</button>
       </div>
-      <div class="pin-error" id="pin-error"></div>
-      <div style="margin-top:16px;font-size:12px;color:#aaa;">
-        💡 密碼：<strong>0105</strong>
-      </div>
+      <p id="pin-err" style="color:red; margin-top:10px; font-size:12px;"></p>
     </div>
 
     <div id="qr-content" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-  <div style="font-size:16px;font-weight:600;">🎫 我的票券 & QR Code</div>
-  <div style="display:flex; gap:8px;">
-    <button onclick="lockQR()" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:#f5f5f5;font-size:12px;cursor:pointer;">🔒 鎖定</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>🎫 我的票券</h3>
+        <button onclick="lockQR()" style="font-size:12px; padding:4px 8px; border-radius:6px; border:1px solid #ddd; background:#fff;">🔒 鎖定</button>
+      </div>
+      <div class="qr-grid" id="qr-grid-container">
+        </div>
+      <div class="qr-add-card" onclick="openAddTicketModal()" style="margin-top:15px; padding:15px;">
+        <span>➕ 新增自訂票券</span>
+      </div>
+    </div>
   </div>
+
 </div>
 
-      <div class="qr-grid">
-        <div class="qr-card" onclick="showQR('esim')">
-          <div class="qr-icon">📱</div>
-          <div class="qr-name">eSIM</div>
-          <div class="qr-sub">點擊查看 QR</div>
-        </div>
-        <div class="qr-card" onclick="showQR('car')">
-          <div class="qr-icon">🚐</div>
-          <div class="qr-name">包車確認</div>
-          <div class="qr-sub">點擊查看 QR</div>
-        </div>
-        <div class="qr-card" onclick="showQR('zoo')">
-          <div class="qr-icon">🦁</div>
-          <div class="qr-name">獅子動物園</div>
-          <div class="qr-sub">點擊查看 QR</div>
-        </div>
-        <div class="qr-card" onclick="showQR('dino')">
-          <div class="qr-icon">🦕</div>
-          <div class="qr-name">侏羅紀世界</div>
-          <div class="qr-sub">點擊查看 QR</div>
-        </div>
-        <div class="qr-card" onclick="showQR('hotel')">
-          <div class="qr-icon">🏨</div>
-          <div class="qr-name">飯店訂單</div>
-          <div class="qr-sub">點擊查看 QR</div>
-        </div>
-        <div class="qr-card" onclick="showQR('airport')">
-          <div class="qr-icon">🚌</div>
-          <div class="qr-name">機場接送</div>
-          <div class="qr-sub">點擊查看 QR</div>
-        </div>
-      </div>
-
-      <div style="background:#E3F2FD;border-radius:12px;padding:12px 14px;font-size:12px;color:#1565C0;margin-top:4px;line-height:1.7;">
-        💡 <strong>如何新增 QR Code？</strong><br>
-        點擊任何票券卡片 → 點「上傳 QR 圖片」→ 選擇手機相簿中的截圖即可儲存（存在瀏覽器本地，不上傳到網路）
-      </div>
-    </div>
-  </div>
-
-</div><div class="modal-overlay" id="rateModal" onclick="closeModal(event,'rateModal')">
+<div class="modal-overlay" id="rateModal" onclick="closeModal(event,'rateModal')">
   <div class="modal">
-    <div class="modal-title">💱 泰銖 ↔ 台幣 換算</div>
-    <div class="modal-sub" id="rate-update-time">載入即時匯率中…</div>
-    <div class="rate-display-big">
-      <div class="rate-big" id="modal-rate">—</div>
-      <div class="rate-label">1 泰銖 = ? 台幣（即時匯率）</div>
+    <h3>💱 泰銖 ↔ 台幣換算</h3>
+    <div style="margin-top:15px;">
+      <input type="number" id="calc-thb" class="calc-input" placeholder="輸入泰銖 (THB)" oninput="calcExchange('thb')">
+      <input type="number" id="calc-twd" class="calc-input" placeholder="等值台幣 (TWD)" oninput="calcExchange('twd')">
     </div>
-    <div class="calc-row">
-      <span class="calc-label">🇹🇭</span>
-      <input class="calc-input" id="thb-input" type="number" placeholder="泰銖 THB" oninput="calcFrom('thb')">
+    <div style="margin-top:15px; background:#F1F8E9; padding:10px; border-radius:10px; font-size:13px; color:#2E7D32;">
+      💡 建議：現金支付夜市、小攤。刷卡優先選擇免海外手續費信用卡，並一律選擇「以泰銖(THB)結帳」。
     </div>
-    <div class="calc-row">
-      <span class="calc-label">🇹🇼</span>
-      <input class="calc-input" id="twd-input" type="number" placeholder="台幣 TWD" oninput="calcFrom('twd')">
-    </div>
-    <div class="calc-result" id="calc-result">輸入金額即可換算</div>
-
-    <div class="card-section-title">💳 我的信用卡比較</div>
-    <div style="font-size:12px;color:#888;margin-bottom:10px;">輸入你持有的信用卡（用逗號分隔），查詢哪張最划算</div>
-    <div class="card-input-row">
-      <input class="card-input" id="card-names" placeholder="例：台新玫瑰,玉山Ubear,國泰" value="台新玫瑰,玉山Ubear,國泰世華">
-      <button class="card-btn" onclick="compareCards()">比較</button>
-    </div>
-    <div id="card-results" class="card-result-list"></div>
-
-    <div style="margin-top:14px;">
-      <div class="card-section-title">💵 現金 vs 刷卡 建議</div>
-      <div class="payment-card cash">
-        <div class="payment-title">💵 現金<span class="winner-badge">通常較划算</span></div>
-        <div class="payment-detail">• 桃園機場換匯匯率通常最好<br>• 建議換 NT$15,000-20,000 現金<br>• 夜市、計程車、小攤必備</div>
-      </div>
-      <div class="payment-card card">
-        <div class="payment-title">💳 信用卡</div>
-        <div class="payment-detail">• 選<strong>免國外手續費</strong>的卡（台新、玉山、國泰）<br>• 刷卡選「<strong>以 THB 計費</strong>」不要選台幣<br>• 百貨、飯店大額消費用刷卡更安全</div>
-      </div>
-      <div class="tip-box">⭐ 最佳策略：現金付夜市小攤按摩，免手續費信用卡刷百貨飯店（選 THB 計費）</div>
-    </div>
-    <button class="modal-close" onclick="document.getElementById('rateModal').classList.remove('show')">關閉</button>
+    <button class="budget-btn" style="margin-top:15px; background:#E53935;" onclick="document.getElementById('rateModal').classList.remove('show')">關閉</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="qrModal" onclick="closeModal(event,'qrModal')">
   <div class="modal">
-    <div id="qr-modal-inner" class="qr-display">
-      <div class="qr-big-name" id="qr-modal-name">票券名稱</div>
-      <div class="qr-big-sub" id="qr-modal-sub">點下方按鈕上傳 QR Code 圖片</div>
-      <div class="qr-img-box" id="qr-img-box">
-        <span>尚未上傳 QR Code</span>
-      </div>
-      <input type="file" id="qr-file-input" accept="image/*" onchange="handleQRUpload(event)">
-      <button class="qr-upload-btn" onclick="document.getElementById('qr-file-input').click()">📷 上傳 QR Code 圖片</button>
-      <div class="qr-info-box" id="qr-info-box">圖片儲存在瀏覽器本地，不會上傳到網路，重新整理後仍然保留。</div>
+    <h3 id="qr-modal-title">票券名稱</h3>
+    <div style="width:100%; height:250px; border:1px dashed #ccc; margin:15px 0; display:flex; align-items:center; justify-content:center; overflow:hidden;" id="qr-img-display">
+      <span>尚未上傳 QR</span>
     </div>
-    <button class="modal-close" onclick="document.getElementById('qrModal').classList.remove('show')">關閉</button>
+    <input type="file" id="qr-file-input" accept="image/*" onchange="handleQRUpload(event)" style="display:none;">
+    <button onclick="document.getElementById('qr-file-input').click()" style="width:100%; padding:12px; background:#E53935; color:white; border:none; border-radius:10px; margin-bottom:10px;">📷 上傳圖片</button>
+    <button class="budget-btn" style="background:#eee; color:#333;" onclick="document.getElementById('qrModal').classList.remove('show')">關閉</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addTicketModal" onclick="closeModal(event,'addTicketModal')">
+  <div class="modal">
+    <h3>新增票券項目</h3>
+    <input type="text" id="new-ticket-name" placeholder="項目名稱 (如：按摩預約單)" class="calc-input" style="margin-top:15px;">
+    <input type="text" id="new-ticket-sub" placeholder="備註 (如：5/12 20:00)" class="calc-input">
+    <button onclick="saveNewTicket()" style="width:100%; padding:12px; background:#4CAF50; color:white; border:none; border-radius:10px; margin-bottom:10px;">確認新增</button>
+    <button class="budget-btn" style="background:#eee; color:#333;" onclick="document.getElementById('addTicketModal').classList.remove('show')">取消</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── 固定飯店 ──
-const HOTEL_ADDR = '2 Sukhumvit Soi 13, Khlong Toei Nuea, Watthana, Bangkok (Hyatt Place)';
+// --- 系統設定 ---
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcjkJrA9qZjIovNc0KFpLTx01bLTgYR_etYZwphk3uGVz43qI9Yr7XTgHnt2jWPrm3Gg/exec'; 
+const PIN_CODE = "0105";
+let currentPin = "";
+let THB_RATE = 0.92;
+const HOTEL_ADDR = "Hyatt Place Bangkok Sukhumvit";
 
-// ── 機場照片上傳邏輯 ──
-let currentAirportStep = null;
-
-function triggerAirportUpload(step) {
-  currentAirportStep = step;
-  document.getElementById('airport-file-input').click();
-}
-
-function handleAirportUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    const dataUrl = ev.target.result;
-    localStorage.setItem('airport_img_' + currentAirportStep, dataUrl);
-    document.getElementById('airport-img-' + currentAirportStep).innerHTML = `<img src="${dataUrl}" alt="接機照片">`;
-    showToast('機場接機照片已儲存！');
-  };
-  reader.readAsDataURL(file);
-}
-
-function loadAirportImages() {
-  for (let i = 1; i <= 6; i++) {
-    const saved = localStorage.getItem('airport_img_' + i);
-    if (saved) {
-      document.getElementById('airport-img-' + i).innerHTML = `<img src="${saved}" alt="接機照片">`;
-    }
-  }
-}
-
-// ── PIN 密碼邏輯 ──
-const CORRECT_PIN = '0105';
-let currentPin = '';
-let isUnlocked = false;
-
-function pinInput(num) {
-  if (currentPin.length >= 4) return;
-  currentPin += num;
-  updatePinDots();
-  if (currentPin.length === 4) {
-    setTimeout(checkPin, 150);
-  }
-}
-
-function pinDelete() { if (currentPin.length > 0) { currentPin = currentPin.slice(0,-1); updatePinDots(); } }
-function pinClear() { currentPin = ''; updatePinDots(); }
-
-function updatePinDots() {
-  for (let i = 0; i < 4; i++) {
-    document.getElementById('dot-'+i).classList.toggle('filled', i < currentPin.length);
-  }
-}
-
-function checkPin() {
-  if (currentPin === CORRECT_PIN) {
-    document.getElementById('qr-lock').style.display = 'none';
-    document.getElementById('qr-content').style.display = 'block';
-    document.getElementById('pin-error').textContent = '';
-    isUnlocked = true;
-  } else {
-    document.getElementById('pin-error').textContent = '密碼錯誤，請再試一次';
-    currentPin = '';
-    updatePinDots();
-    setTimeout(() => { document.getElementById('pin-error').textContent = ''; }, 2000);
-  }
-}
-
-function lockQR() {
-  isUnlocked = false;
-  currentPin = '';
-  updatePinDots();
-  document.getElementById('qr-lock').style.display = 'flex';
-  document.getElementById('qr-content').style.display = 'none';
-}
-
-// ── QR Code 管理 ──
-const QR_ITEMS = {
-  esim:   { name: 'eSIM 上網卡', sub: '掃描後依指示安裝' },
-  car:    { name: '包車確認書', sub: '2026/05/11 全日包車' },
-  zoo:    { name: '獅子動物園門票', sub: 'Sriayuthaya Lion Park' },
-  dino:   { name: '侏羅紀世界門票', sub: 'Asiatique 河濱碼頭' },
-  hotel:  { name: '飯店訂單確認', sub: 'Hyatt Place Bangkok Sukhumvit' },
-  airport:{ name: '機場接送確認', sub: '抵達素萬那普機場時出示' }
-};
-let currentQRId = null;
-
-function showQR(id) {
-  currentQRId = id;
-  const item = QR_ITEMS[id];
-  document.getElementById('qr-modal-name').textContent = item.name;
-  document.getElementById('qr-modal-sub').textContent = item.sub;
-  const imgBox = document.getElementById('qr-img-box');
-  const saved = localStorage.getItem('qr_' + id);
-  if (saved) {
-    imgBox.innerHTML = `<img src="${saved}" alt="QR Code">`;
-  } else {
-    imgBox.innerHTML = '<span style="font-size:13px;color:#aaa;padding:20px;text-align:center;">尚未上傳<br>點下方按鈕上傳</span>';
-  }
-  document.getElementById('qrModal').classList.add('show');
-}
-
-function handleQRUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    const dataUrl = ev.target.result;
-    localStorage.setItem('qr_' + currentQRId, dataUrl);
-    document.getElementById('qr-img-box').innerHTML = `<img src="${dataUrl}" alt="QR Code">`;
-    showToast('QR Code 已儲存！');
-  };
-  reader.readAsDataURL(file);
-}
-
-// ── 匯率 ──
-let THB_RATE = 0;
-async function fetchRate() {
+// --- 記帳功能 ---
+async function addExpense() {
+  const item = document.getElementById('exp-item').value;
+  const thb = document.getElementById('exp-amount').value;
+  if (!item || !thb) { showToast('請輸入項目與金額'); return; }
+  
+  showToast('正在同步至雲端...');
+  const twd = Math.round(thb * THB_RATE);
+  
   try {
-    const r = await fetch('https://api.exchangerate-api.com/v4/latest/THB');
-    const d = await r.json();
-    THB_RATE = d.rates.TWD;
-    const display = THB_RATE.toFixed(3);
-    document.getElementById('rate-display').textContent = `💱 1 THB ≈ ${display} TWD  |  100 THB ≈ ${(THB_RATE*100).toFixed(1)} TWD`;
-    document.getElementById('modal-rate').textContent = `1 THB = ${display} TWD`;
-    document.getElementById('rate-update-time').textContent = '即時匯率・更新：' + new Date().toLocaleTimeString('zh-TW');
-  } catch(e) {
-    THB_RATE = 0.91;
-    document.getElementById('rate-display').textContent = `💱 1 THB ≈ 0.910 TWD（參考值）`;
-    document.getElementById('modal-rate').textContent = `1 THB ≈ 0.910 TWD`;
-    document.getElementById('rate-update-time').textContent = '無法取得即時匯率，使用參考值';
-  }
-}
-fetchRate();
-
-function openRateModal() { document.getElementById('rateModal').classList.add('show'); }
-
-function calcFrom(from) {
-  if (!THB_RATE) return;
-  const thb = document.getElementById('thb-input');
-  const twd = document.getElementById('twd-input');
-  const res = document.getElementById('calc-result');
-  if (from === 'thb' && thb.value) {
-    const v = parseFloat(thb.value) * THB_RATE;
-    twd.value = v.toFixed(0);
-    res.textContent = `${thb.value} 泰銖 ≈ ${v.toFixed(0)} 台幣`;
-  } else if (from === 'twd' && twd.value) {
-    const v = parseFloat(twd.value) / THB_RATE;
-    thb.value = v.toFixed(0);
-    res.textContent = `${twd.value} 台幣 ≈ ${v.toFixed(0)} 泰銖`;
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'add', item, thb, twd, user: 'User' })
+    });
+    document.getElementById('exp-item').value = '';
+    document.getElementById('exp-amount').value = '';
+    fetchExpenses();
+  } catch (e) {
+    showToast('雲端連線失敗');
   }
 }
 
-// ── 信用卡比較 ──
-const CARD_DB = {
-  '台新玫瑰':    { cashback: 3.0, noFee: true,  desc: '海外刷卡 3% 回饋・免國外手續費' },
-  '玉山Ubear':   { cashback: 2.2, noFee: true,  desc: '海外刷卡 2.2% 回饋・免國外手續費' },
-  '國泰世華':    { cashback: 2.0, noFee: true,  desc: '海外刷卡 2% 回饋・免國外手續費' },
-  '中信':        { cashback: 0.5, noFee: false, desc: '海外手續費 1.5%・一般卡約 0.5% 回饋' },
-  '富邦J卡':      { cashback: 3.0, noFee: false, desc: '海外刷卡 3%・但有 1.5% 手續費' },
-  '聯邦賴點':    { cashback: 2.8, noFee: true,  desc: '海外刷卡 2.8%・免手續費' },
-  '永豐大戶卡':  { cashback: 1.5, noFee: true,  desc: '海外刷卡 1.5%・免手續費' },
-};
-function compareCards() {
-  const input = document.getElementById('card-names').value.trim();
-  if (!input) { showToast('請輸入信用卡名稱'); return; }
-  const names = input.split(/[,，、]/).map(n => n.trim()).filter(Boolean);
-  const results = names.map(name => {
-    const found = Object.keys(CARD_DB).find(k => name.includes(k) || k.includes(name));
-    if (found) return { name, ...CARD_DB[found] };
-    return { name, cashback: 0.5, noFee: false, desc: '查無此卡資料，預設一般回饋估算' };
-  }).sort((a,b) => {
-    const aNet = a.noFee ? a.cashback : a.cashback - 1.5;
-    const bNet = b.noFee ? b.cashback : b.cashback - 1.5;
-    return bNet - aNet;
-  });
-
-  const thb = parseFloat(document.getElementById('thb-input').value) || 1000;
-  const twd = thb * THB_RATE;
-
-  let html = '';
-  results.forEach((c, i) => {
-    const net = c.noFee ? c.cashback : Math.max(0, c.cashback - 1.5);
-    const saving = (twd * net / 100).toFixed(1);
-    const isBest = i === 0;
-    html += `<div class="card-item ${isBest ? 'best' : ''}">
-      <div class="card-rank">${['🥇','🥈','🥉'][i] || '▪'} ${isBest ? '最推薦<span class="winner-badge">最划算</span>' : `第 ${i+1} 名`}</div>
-      <div class="card-name">${c.name}</div>
-      <div class="card-detail">${c.desc}<br>${c.noFee ? '✅ 免國外手續費' : '❌ 有 1.5% 國外手續費'}</div>
-      <div class="card-saving">淨回饋：${net.toFixed(1)}% ≈ 每 ${Math.round(twd)} 台幣省 ${saving} 元</div>
-    </div>`;
-  });
-  document.getElementById('card-results').innerHTML = html;
-}
-
-// ── 叫車 ──
-function updateLink(e, appId) {
-  const from = document.getElementById('from-input').value.trim();
-  const to = document.getElementById('to-input').value.trim();
-  if (appId === 'gmaps') {
-    if (!to) { e.preventDefault(); showToast('請填入終點'); return; }
-    e.currentTarget.href = 'https://www.google.com/maps/dir/' + encodeURIComponent(from||'My+Location') + '/' + encodeURIComponent(to);
-  } else if (appId === 'grab') {
-    if (!to) { e.preventDefault(); showToast('請填入終點'); return; }
-    e.currentTarget.href = 'grab://open?screenType=BOOKING&dropOffAddress=' + encodeURIComponent(to);
-  } else if (appId === 'bolt') {
-    e.currentTarget.href = 'taxify://';
-  } else if (appId === 'muvmi') {
-    e.currentTarget.href = 'muvmi://';
+async function fetchExpenses() {
+  const list = document.getElementById('expense-list');
+  try {
+    const response = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'get' })
+    });
+    const data = await response.json();
+    
+    let html = '';
+    let total = 0;
+    data.reverse().forEach(row => {
+      total += parseFloat(row[2]);
+      html += `<div class="budget-item">
+        <span>${row[1]}</span>
+        <span style="font-weight:600;">฿ ${row[2]} <small style="color:#999; font-weight:400;">(NT$ ${row[3]})</small></span>
+      </div>`;
+    });
+    list.innerHTML = html || '<p style="text-align:center; color:#ccc;">尚無消費紀錄</p>';
+    document.getElementById('total-spent').textContent = '฿ ' + total.toLocaleString();
+    document.getElementById('total-twd').textContent = '≈ NT$ ' + Math.round(total * THB_RATE).toLocaleString();
+  } catch (e) {
+    list.innerHTML = '<p style="text-align:center; color:#f44336;">無法載入雲端資料</p>';
   }
 }
+
+// --- 叫車功能 ---
 function fillPlace(field, val) {
   document.getElementById(field === 'from' ? 'from-input' : 'to-input').value = val;
   showToast(field === 'from' ? '已填入起點' : '已填入終點');
@@ -972,80 +357,268 @@ function swapPlaces() {
   const f = document.getElementById('from-input'), t = document.getElementById('to-input');
   [f.value, t.value] = [t.value, f.value];
 }
-function fillAndRide(from, to) {
-  document.getElementById('from-input').value = from;
-  document.getElementById('to-input').value = to;
-  switchTab('ride');
-  showToast('已填入路線，選擇叫車 App');
-}
-
-// ── 預約 App ──
-function handleBooking(e, scheme, fallback) {
+function updateLink(e, appId) {
   e.preventDefault();
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.src = scheme;
-  document.body.appendChild(iframe);
-  setTimeout(() => { document.body.removeChild(iframe); window.open(fallback, '_blank'); }, 1500);
-}
-
-// ── 泰語 ──
-function doCustomTranslate() {
-  const text = document.getElementById('custom-zh-input').value.trim();
-  if (!text) { showToast('請輸入中文'); return; }
-  window.open('https://translate.google.com/?sl=zh-TW&tl=th&text=' + encodeURIComponent(text) + '&op=translate', '_blank');
-}
-
-function switchPhraseCat(cat) {
-  document.querySelectorAll('.phrase-menu').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.phrase-list').forEach(el => el.classList.remove('active'));
-  document.getElementById('menu-' + cat).classList.add('active');
-  document.getElementById('list-' + cat).classList.add('active');
-}
-
-// ── 語音 ──
-function tts(text) {
-  if (!('speechSynthesis' in window)) { showToast('請改用 Google 翻譯按鈕'); return; }
-  window.speechSynthesis.cancel();
-  const go = () => {
-    const voices = window.speechSynthesis.getVoices();
-    const u = new SpeechSynthesisUtterance(text);
-    const v = voices.find(x => x.lang && x.lang.startsWith('th'));
-    if (v) u.voice = v;
-    u.lang = 'th-TH'; u.rate = 0.82;
-    u.onerror = () => showToast('請用 Google 翻譯');
-    window.speechSynthesis.speak(u);
-    showToast('播放中…');
-  };
-  window.speechSynthesis.getVoices().length === 0 ? (window.speechSynthesis.onvoiceschanged = go) : go();
-}
-
-// ── UI ──
-function switchTab(id) {
-  const ids = ['airport','itinerary','ride','phrases','booking','explore','qrzone'];
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ids[i]===id));
-  ids.forEach(t => document.getElementById(t).classList.toggle('active', t===id));
-  if (id === 'qrzone' && !isUnlocked) {
-    document.getElementById('qr-lock').style.display = 'flex';
-    document.getElementById('qr-content').style.display = 'none';
+  const from = document.getElementById('from-input').value.trim();
+  const to = document.getElementById('to-input').value.trim();
+  if (appId === 'gmaps') {
+    if (!to) { showToast('請填入終點'); return; }
+    window.location.href = 'https://www.google.com/maps/dir/' + encodeURIComponent(from||'My+Location') + '/' + encodeURIComponent(to);
+  } else if (appId === 'grab') {
+    if (!to) { showToast('請填入終點'); return; }
+    window.location.href = 'grab://open?screenType=BOOKING&dropOffAddress=' + encodeURIComponent(to);
+  } else if (appId === 'bolt') {
+    window.location.href = 'taxify://';
+  } else if (appId === 'muvmi') {
+    window.location.href = 'muvmi://';
   }
 }
-function toggleDay(id) {
-  const el = document.getElementById(id), arrow = document.getElementById(id+'-arrow');
-  const open = el.style.display === 'block';
-  el.style.display = open ? 'none' : 'block';
-  arrow.textContent = open ? '›' : '⌄';
+
+// --- 泰語數據 ---
+const PHRASES = {
+  hotel: [
+    {th:"เช็คอิน", zh:"我要入住", r:"Chek-in"},
+    {th:"ห้องของฉันอยู่ที่ไหน", zh:"我的房間在哪？", r:"Hong khong chan yu thi nai?"},
+    {th:"ขอฝากกระเป๋า", zh:"可以寄放行李嗎？", r:"Kho fak krapao"},
+    {th:"รหัส Wifi คืออะไร", zh:"Wifi 密碼是什麼？", r:"Rahat Wifi khue arai?"},
+    {th:"เช็คเอาท์", zh:"我要退房", r:"Chek-aut"},
+    {th:"ขอผ้าเช็ดตัวเพิ่ม", zh:"我需要更多毛巾", r:"Kho pha chet tua phoem"},
+    {th:"แอร์ไม่เย็น", zh:"冷氣不冷", r:"Ae mai yen"},
+    {th:"ช่วยเรียกแท็กซี่หน่อย", zh:"請幫我叫計程車", r:"Chuay riak taxi noi"},
+    {th:"ห้องน้ำอยู่ที่ไหน", zh:"廁所在哪裡？", r:"Hong nam yu thi nai?"},
+    {th:"อาหารเช้ากี่โมง", zh:"早餐幾點開始？", r:"Ahan chao ki mong?"}
+  ],
+  night: [
+    {th:"ราคาเท่าไหร่", zh:"多少錢？", r:"Rakha thao rai?"},
+    {th:"ลดหน่อยได้ไหม", zh:"便宜一點可以嗎？(殺價首選)", r:"Rot noi dai mai?"},
+    {th:"แพงเกินไป", zh:"太貴了", r:"Phaeng koen pai"},
+    {th:"ลดได้เท่าไหร่", zh:"最低多少錢？", r:"Rot dai thao rai?"},
+    {th:"ราคาสุดท้ายเท่าไหร่", zh:"最後價格是多少？", r:"Rakha sut thai thao rai?"},
+    {th:"ซื้อเยอะ ลดหน่อย", zh:"買很多，便宜一點", r:"Sue yoe, rot noi"},
+    {th:"ไม่เอาถุง", zh:"不需要袋子", r:"Mai ao thung"},
+    {th:"เอาอันนี้", zh:"我要買這個", r:"Ao an ni"},
+    {th:"มีสีอื่นไหม", zh:"有別的顏色嗎？", r:"Mii si uen mai?"},
+    {th:"สแกน QR ได้ไหม", zh:"可以掃碼支付嗎？", r:"Scan QR dai mai?"}
+  ],
+  food: [
+    {th:"สั่งอาหารหน่อย", zh:"我要點餐", r:"Sang ahan noi"},
+    {th:"ไม่เผ็ด", zh:"不要辣", r:"Mai phet"},
+    {th:"ไม่ใส่ผักชี", zh:"不要香菜", r:"Mai sai phak-chi"},
+    {th:"อร่อยมาก", zh:"非常好吃", r:"Aroi mak"},
+    {th:"เก็บเงินด้วย", zh:"買單", r:"Kep ngoen duay"},
+    {th:"ขอเมนูภาษาอังกฤษ", zh:"請給我英文菜單", r:"Kho menu phasa ang-krit"},
+    {th:"แพ้อาหารทะเล", zh:"我對海鮮過敏", r:"Phae ahan thale"},
+    {th:"เอาน้ำแข็งด้วย", zh:"我需要冰塊", r:"Ao nam khaeng duay"},
+    {th:"ห่อกลับบ้าน", zh:"我要打包", r:"Ho klap ban"},
+    {th:"สองท่าน", zh:"兩位", r:"Song than"}
+  ],
+  mall: [
+    {th:"ทำ VAT Refund ที่ไหน", zh:"退稅櫃檯在哪裡？", r:"Tham VAT Refund thi nai?"},
+    {th:"ต้องช้อปเท่าไหร่ถึงจะคืนภาษีได้", zh:"買多少錢才能退稅？", r:"Tong shop thao rai thueng ja khuen phasi dai?"},
+    {th:"ขอใบกำกับภาษีหน่อย", zh:"請給我稅單/發票", r:"Kho bai kam kap phasi noi"},
+    {th:"รับบัตรเครดิตไหม", zh:"收信用卡嗎？", r:"Rap bat khredit mai?"},
+    {th:"ซุปเปอร์มาร์เก็ตอยู่ที่ไหน", zh:"超市在哪裡？", r:"Supermarket yu thi nai?"},
+    {th:"ลิฟต์อยู่ที่ไหน", zh:"電梯在哪裡？", r:"Lift yu thi nai?"},
+    {th:"มีส่วนลดไหม", zh:"有折扣嗎？", r:"Mii suan rot mai?"},
+    {th:"ห้องลองชุดอยู่ที่ไหน", zh:"試衣間在哪裡？", r:"Hong long chut yu thi nai?"},
+    {th:"ขอดูเฉยๆ", zh:"我只是看看", r:"Kho du choei choei"},
+    {th:"มีของใหม่ไหม", zh:"有新的嗎？", r:"Mii khong mai mai?"}
+  ],
+  sos: [
+    {th:"ฉันรู้สึกไม่สบาย", zh:"我覺得不舒服", r:"Chan rusuek mai sabai"},
+    {th:"ฉันปวดหัว", zh:"我頭痛", r:"Chan puat hua"},
+    {th:"อยากไปหาหมอ", zh:"我想看醫生", r:"Yak pai ha mor"},
+    {th:"ช่วยพาไปโรงพยาบาลหน่อย", zh:"請帶我去醫院", r:"Chuay pha pai rong phayaban noi"},
+    {th:"โรงพยาบาลที่ใกล้ที่สุดอยู่ที่ไหน", zh:"最近的醫院在哪？", r:"Rong phayaban thi klai thi sut yu nai?"},
+    {th:"ช่วยด้วย", zh:"救命 / 幫幫我", r:"Chuay duay"},
+    {th:"เรียกหน่วยกู้ภัยหน่อย", zh:"請幫我叫救護車", r:"Riak nuai ku phai noi"},
+    {th:"ฉันหลงทาง", zh:"我迷路了", r:"Chan long thang"},
+    {th:"พาสปอร์ตหาย", zh:"護照不見了", r:"Passport hai"},
+    {th:"เรียกตำรวจให้หน่อย", zh:"請幫我報警", r:"Riak tam-ruat hai noi"}
+  ]
+};
+
+// --- 票券數據管理 ---
+let tickets = JSON.parse(localStorage.getItem('my_tickets')) || [
+  {id:'esim1', name:'eSIM 卡 1', sub:'上網用 QR 1'},
+  {id:'esim2', name:'eSIM 卡 2', sub:'上網用 QR 2'},
+  {id:'dino1', name:'侏羅紀 1', sub:'展覽門票 1'},
+  {id:'dino2', name:'侏羅紀 2', sub:'展覽門票 2'},
+  {id:'hotel', name:'飯店訂單', sub:'Hyatt Place'},
+  {id:'car', name:'包車確認', sub:'5/11 大城包車'}
+];
+
+function renderTickets() {
+  const container = document.getElementById('qr-grid-container');
+  container.innerHTML = '';
+  tickets.forEach(tk => {
+    const card = document.createElement('div');
+    card.className = 'qr-card';
+    card.innerHTML = `
+      <button class="qr-del-btn" onclick="deleteTicket('${tk.id}', event)">✕</button>
+      <div onclick="showQR('${tk.id}')">
+        <div style="font-size:24px; margin-bottom:5px;">🎫</div>
+        <div style="font-size:13px; font-weight:600;">${tk.name}</div>
+        <div style="font-size:10px; color:#999;">${tk.sub}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
+
+function openAddTicketModal() {
+  document.getElementById('addTicketModal').classList.add('show');
+}
+
+function saveNewTicket() {
+  const name = document.getElementById('new-ticket-name').value;
+  const sub = document.getElementById('new-ticket-sub').value;
+  if(!name) return;
+  const id = 'tk_' + Date.now();
+  tickets.push({id, name, sub});
+  localStorage.setItem('my_tickets', JSON.stringify(tickets));
+  renderTickets();
+  document.getElementById('addTicketModal').classList.remove('show');
+  document.getElementById('new-ticket-name').value = '';
+  document.getElementById('new-ticket-sub').value = '';
+}
+
+function deleteTicket(id, e) {
+  e.stopPropagation();
+  if(!confirm('確定要刪除此票券嗎？')) return;
+  tickets = tickets.filter(t => t.id !== id);
+  localStorage.removeItem('qr_img_' + id);
+  localStorage.setItem('my_tickets', JSON.stringify(tickets));
+  renderTickets();
+}
+
+// --- 密碼與 UI 邏輯 ---
+function pinIn(n) {
+  if(currentPin.length >= 4) return;
+  currentPin += n;
+  updatePin();
+  if(currentPin.length === 4) {
+    if(currentPin === PIN_CODE) {
+      document.getElementById('qr-lock').style.display = 'none';
+      document.getElementById('qr-content').style.display = 'block';
+    } else {
+      document.getElementById('pin-err').textContent = "密碼錯誤";
+      setTimeout(pinDelAll, 1000);
+    }
+  }
+}
+function pinDel() { currentPin = currentPin.slice(0,-1); updatePin(); }
+function pinDelAll() { currentPin = ""; updatePin(); document.getElementById('pin-err').textContent = ""; }
+function updatePin() {
+  const dots = document.querySelectorAll('#pin-dots .pin-dot');
+  dots.forEach((d, i) => d.classList.toggle('filled', i < currentPin.length));
+}
+function lockQR() { currentPin = ""; updatePin(); document.getElementById('qr-lock').style.display = 'flex'; document.getElementById('qr-content').style.display = 'none'; }
+
+// --- 泰語介面 ---
+function switchPhrase(cat, el) {
+  document.querySelectorAll('.phrase-menu').forEach(m => m.classList.remove('active'));
+  el.classList.add('active');
+  const container = document.getElementById('phrase-list-container');
+  container.innerHTML = '';
+  PHRASES[cat].forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'phrase-card';
+    div.innerHTML = `
+      <div class="phrase-thai">${p.th}</div>
+      <div class="phrase-zh">${p.zh}</div>
+      <div style="font-size:10px; color:#aaa;">${p.r}</div>
+      <div class="sound-row">
+        <button class="sound-btn" onclick="window.open('https://translate.google.com/?sl=th&tl=zh-TW&text=${encodeURIComponent(p.th)}&op=translate')">🔗 翻譯/聽音</button>
+        <button class="sound-btn" onclick="tts('${p.th}')">🔊 裝置發音</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function doTranslate() {
+  const txt = document.getElementById('custom-zh').value;
+  if(txt) window.open(`https://translate.google.com/?sl=zh-TW&tl=th&text=${encodeURIComponent(txt)}&op=translate`);
+}
+
+// --- 機場與照片 ---
+let curStep = 0;
+function triggerAirportUpload(s) { curStep = s; document.getElementById('airport-file-input').click(); }
+function handleAirportUpload(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    localStorage.setItem('airport_img_'+curStep, ev.target.result);
+    document.getElementById('airport-img-'+curStep).innerHTML = `<img src="${ev.target.result}">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// --- 票券照片 ---
+let curTkId = '';
+function showQR(id) {
+  curTkId = id;
+  const tk = tickets.find(t => t.id === id);
+  document.getElementById('qr-modal-title').textContent = tk.name;
+  const saved = localStorage.getItem('qr_img_' + id);
+  document.getElementById('qr-img-display').innerHTML = saved ? `<img src="${saved}" style="max-width:100%; max-height:100%;">` : '<span>尚未上傳 QR</span>';
+  document.getElementById('qrModal').classList.add('show');
+}
+function handleQRUpload(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    localStorage.setItem('qr_img_'+curTkId, ev.target.result);
+    document.getElementById('qr-img-display').innerHTML = `<img src="${ev.target.result}" style="max-width:100%; max-height:100%;">`;
+    showToast('票券已儲存');
+  };
+  reader.readAsDataURL(file);
+}
+
+// --- 匯率換算與 UI ---
+function openRateModal() { document.getElementById('rateModal').classList.add('show'); }
+function calcExchange(from) {
+  if (!THB_RATE) return;
+  const thb = document.getElementById('calc-thb');
+  const twd = document.getElementById('calc-twd');
+  if (from === 'thb' && thb.value) {
+    twd.value = (thb.value * THB_RATE).toFixed(0);
+  } else if (from === 'twd' && twd.value) {
+    thb.value = (twd.value / THB_RATE).toFixed(0);
+  }
+}
+async function fetchRate() {
+  try {
+    const r = await fetch('https://api.exchangerate-api.com/v4/latest/THB');
+    const d = await r.json();
+    THB_RATE = d.rates.TWD;
+    document.getElementById('rate-display').textContent = `💱 1 THB ≈ ${THB_RATE.toFixed(3)} TWD`;
+  } catch(e) { THB_RATE = 0.92; }
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.onclick.toString().includes(id)));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === id));
+  if(id === 'budget') fetchExpenses();
+}
+function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+function tts(t) { if(!('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'th-TH'; window.speechSynthesis.speak(u); }
 function closeModal(e, id) { if (e.target.id === id) document.getElementById(id).classList.remove('show'); }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
 
-// 啟動時載入已儲存的機場照片
-document.addEventListener('DOMContentLoaded', loadAirportImages);
-
+// --- 初始化 ---
+document.addEventListener('DOMContentLoaded', () => {
+  fetchRate();
+  for(let i=1; i<=6; i++){
+    const s = localStorage.getItem('airport_img_'+i);
+    if(s) document.getElementById('airport-img-'+i).innerHTML = `<img src="${s}">`;
+  }
+  renderTickets();
+  switchPhrase('hotel', document.querySelector('.phrase-menu'));
+});
 </script>
+
 </body>
 </html>
