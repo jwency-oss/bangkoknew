@@ -125,19 +125,24 @@
   }
 
   /* 行程專用樣式 */
-  .itinerary-box { 
+  .itinerary { 
+    background: #fff; 
     border: 1px solid #eee; 
     border-radius: 14px; 
     overflow: hidden; 
-    background: #fff; 
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04); 
   }
   
   .day-row { 
     display: flex; 
     align-items: center; 
-    padding: 1rem; 
+    padding: 0.9rem 1rem; 
     border-bottom: 1px solid #f0f0f0; 
     cursor: pointer; 
+  }
+  
+  .day-row:last-child { 
+    border-bottom: none; 
   }
   
   .day-dot { 
@@ -145,7 +150,7 @@
     height: 10px; 
     border-radius: 50%; 
     background: #E53935; 
-    margin-right: 12px; 
+    margin-right: 13px; 
   }
   
   .day-info { 
@@ -154,7 +159,7 @@
   
   .day-date { 
     font-size: 14px; 
-    font-weight: 700; 
+    font-weight: 600; 
   }
   
   .day-plan { 
@@ -165,7 +170,7 @@
   
   .day-detail { 
     display: none; 
-    padding: 1rem; 
+    padding: 0.85rem 1rem; 
     background: #fafafa; 
     border-top: 1px solid #f0f0f0; 
   }
@@ -174,51 +179,87 @@
     background: #fff; 
     border: 1px solid #eee; 
     border-radius: 10px; 
-    padding: 12px; 
+    padding: 10px 12px; 
     margin-bottom: 8px; 
   }
   
   .stop-time { 
     font-size: 11px; 
     color: #999; 
-    font-weight: 600; 
+    margin-bottom: 2px; 
   }
   
   .stop-name { 
     font-size: 14px; 
-    font-weight: 700; 
-    margin: 3px 0; 
+    font-weight: 600; 
+    margin-bottom: 3px; 
   }
   
   .stop-note { 
     font-size: 12px; 
-    color: #666; 
+    color: #888; 
     line-height: 1.5; 
+  }
+  
+  .arrow-down { 
+    text-align: center; 
+    font-size: 13px; 
+    color: #ccc; 
+    margin: 4px 0; 
+  }
+  
+  .stop-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+  }
+  
+  .ride-mini { 
+    display: inline-block; 
+    padding: 6px 12px; 
+    border-radius: 8px; 
+    font-size: 11px; 
+    border: 1px solid #90CAF9; 
+    background: #E3F2FD; 
+    color: #1565C0;
+    cursor: pointer; 
+    font-weight: 600;
   }
 
   /* 記帳專用樣式 */
   .summary-box { 
     background: #E8F5E9; 
     padding: 15px; 
-    border-radius: 12px; 
+    border-radius: 10px; 
     text-align: center; 
-    margin-bottom: 12px; 
+    margin-bottom: 15px; 
   }
   
   .summary-val { 
-    font-size: 26px; 
-    font-weight: 800; 
+    font-size: 24px; 
+    font-weight: 700; 
     color: #2E7D32; 
+    margin: 5px 0; 
   }
   
   .budget-input { 
     width: 100%; 
     padding: 12px; 
     border: 1px solid #ddd; 
-    border-radius: 10px; 
+    border-radius: 8px; 
     margin-bottom: 10px; 
     font-size: 14px; 
-    outline: none; 
+  }
+  
+  .budget-btn { 
+    width: 100%; 
+    padding: 12px; 
+    background: #2E7D32; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: 600; 
+    cursor: pointer; 
   }
 
   .selector-group { 
@@ -244,65 +285,26 @@
     border-color: #2E7D32; 
   }
   
-  .budget-btn { 
-    width: 100%; 
-    padding: 14px; 
-    background: #2E7D32; 
-    color: white; 
-    border: none; 
-    border-radius: 10px; 
-    font-weight: 700; 
-    cursor: pointer; 
-    margin-top: 5px; 
-  }
-  
-  .expense-item { 
-    background: #fff; 
-    border-bottom: 1px solid #f0f0f0; 
-    padding: 12px 0; 
+  .budget-item { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
+    padding: 10px 0; 
+    border-bottom: 1px solid #f0f0f0; 
+    font-size: 13px; 
   }
   
-  .exp-left { 
-    flex: 1; 
-  }
-  
-  .exp-title { 
-    font-size: 14px; 
-    font-weight: 600; 
-  }
-  
-  .exp-meta { 
-    font-size: 11px; 
-    color: #999; 
-    margin-top: 2px; 
-  }
-  
-  .exp-right { 
-    text-align: right; 
-    margin-left: 10px; 
-  }
-  
-  .exp-amount { 
-    font-size: 15px; 
-    font-weight: 700; 
-    color: #2E7D32; 
-  }
-  
-  .exp-del { 
-    color: #E53935; 
-    font-size: 12px; 
-    margin-top: 5px; 
-    cursor: pointer; 
-    text-decoration: underline; 
-  }
+  .exp-left { flex: 1; }
+  .exp-title { font-size: 14px; font-weight: 600; }
+  .exp-meta { font-size: 11px; color: #999; margin-top: 2px; }
+  .exp-right { text-align: right; margin-left: 10px; }
+  .exp-amount { font-size: 15px; font-weight: 700; color: #2E7D32; }
+  .exp-del { color: #E53935; font-size: 12px; margin-top: 5px; cursor: pointer; text-decoration: underline; }
 
   /* 泰語左右分欄 */
   .phrase-layout { 
     display: flex; 
-    height: 62vh; 
+    height: 60vh; 
     border: 1px solid #eee; 
     border-radius: 12px; 
     overflow: hidden; 
@@ -311,13 +313,13 @@
   
   .phrase-sidebar { 
     width: 85px; 
-    background: #f8f8f8; 
+    background: #f9f9f9; 
     border-right: 1px solid #eee; 
     overflow-y: auto; 
   }
   
   .phrase-menu { 
-    padding: 18px 5px; 
+    padding: 15px 5px; 
     font-size: 13px; 
     text-align: center; 
     cursor: pointer; 
@@ -328,13 +330,13 @@
   .phrase-menu.active { 
     background: #fff; 
     color: #E53935; 
-    font-weight: 700; 
+    font-weight: 600; 
     border-left: 4px solid #E53935; 
   }
   
   .phrase-content { 
     flex: 1; 
-    padding: 10px; 
+    padding: 12px; 
     overflow-y: auto; 
     background: #fff; 
   }
@@ -343,142 +345,56 @@
     border: 1px solid #eee; 
     border-radius: 10px; 
     padding: 10px; 
-    margin-bottom: 10px; 
+    margin-bottom: 8px; 
     box-shadow: 0 1px 2px rgba(0,0,0,0.02); 
   }
   
   .phrase-thai { 
-    font-size: 16px; 
+    font-size: 17px; 
     color: #E53935; 
-    font-weight: 700; 
+    font-weight: 600; 
   }
-
+  
+  .phrase-zh { 
+    font-size: 13px; 
+    margin: 4px 0; 
+    color: #333; 
+  }
+  
   .sound-row { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
-    gap: 6px; 
-    margin-top: 6px; 
+    gap: 5px; 
+    margin-top: 5px; 
   }
   
   .sound-btn { 
-    padding: 8px; 
+    padding: 6px; 
     font-size: 11px; 
     border: 1px solid #ddd; 
-    border-radius: 8px; 
+    border-radius: 6px; 
     background: #f9f9f9; 
     cursor: pointer; 
+    color: #333; 
   }
 
-  /* 密碼鎖與票券 */
-  .lock-screen { 
+  /* 叫車 */
+  .ride-input-row { 
     display: flex; 
-    flex-direction: column; 
     align-items: center; 
-    justify-content: center; 
-    min-height: 400px; 
+    gap: 8px; 
+    margin-bottom: 9px; 
   }
   
-  .pin-dots { 
-    display: flex; 
-    gap: 12px; 
-    margin-bottom: 30px; 
-  }
-  
-  .pin-dot { 
-    width: 15px; 
-    height: 15px; 
-    border-radius: 50%; 
-    border: 2px solid #ddd; 
-  }
-  
-  .pin-dot.filled { 
-    background: #E53935; 
-    border-color: #E53935; 
-  }
-  
-  .pin-pad { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 15px; 
-    width: 250px; 
-  }
-  
-  .pin-key { 
-    padding: 20px; 
-    border-radius: 50%; 
-    border: 1px solid #eee; 
-    background: #fafafa; 
-    font-size: 22px; 
-    cursor: pointer; 
-  }
-  
-  .qr-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 12px; 
-  }
-  
-  .qr-card { 
-    border: 1px solid #eee; 
-    border-radius: 14px; 
-    padding: 15px; 
-    text-align: center; 
-    position: relative; 
-    background: #fff; 
-  }
-  
-  .qr-del-btn { 
-    position: absolute; 
-    top: 6px; 
-    right: 6px; 
-    color: #E53935; 
+  .ride-input { 
+    flex: 1; 
+    padding: 10px 12px; 
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
     font-size: 14px; 
-    cursor: pointer; 
-    border: none; 
-    background: none; 
-  }
-
-  /* 照片上傳 */
-  .img-upload-box { 
-    width: 100%; 
-    height: 160px; 
-    border: 2px dashed #ddd; 
-    border-radius: 12px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin-top: 10px; 
-    overflow: hidden; 
-    background: #fdfdfd; 
-    cursor: pointer; 
+    background: #fafafa; 
   }
   
-  .img-upload-box img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-  }
-
-  .toast { 
-    position: fixed; 
-    bottom: 80px; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    background: #333; 
-    color: white; 
-    padding: 10px 20px; 
-    border-radius: 25px; 
-    font-size: 13px; 
-    opacity: 0; 
-    transition: 0.3s; 
-    z-index: 999; 
-    pointer-events: none; 
-  }
-  
-  .toast.show { 
-    opacity: 1; 
-  }
-
   .ride-chip { 
     display: inline-block; 
     padding: 6px 12px; 
@@ -490,30 +406,6 @@
     margin: 0 4px 8px 0; 
   }
   
-  .modal-overlay { 
-    display: none; 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(0,0,0,0.6); 
-    z-index: 200; 
-    align-items: flex-end; 
-    justify-content: center; 
-  }
-  
-  .modal-overlay.show { 
-    display: flex; 
-  }
-  
-  .modal { 
-    background: #fff; 
-    border-radius: 20px 20px 0 0; 
-    padding: 1.5rem 1.25rem 2rem; 
-    width: 100%; 
-    max-width: 480px; 
-    max-height: 88vh; 
-    overflow-y: auto; 
-  }
-
   .ride-app-grid { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
@@ -532,6 +424,145 @@
     font-weight: 600; 
     text-decoration: none; 
     color: white; 
+  }
+
+  /* 票券管理 & 密碼鎖 */
+  .qr-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px; 
+  }
+  
+  .qr-card { 
+    border: 1px solid #eee; 
+    border-radius: 12px; 
+    padding: 15px; 
+    text-align: center; 
+    position: relative; 
+    background: #fff; 
+    cursor: pointer; 
+  }
+  
+  .qr-del-btn { 
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    background: #ffeeee; 
+    color: #E53935; 
+    border: none; 
+    width: 24px; 
+    height: 24px; 
+    border-radius: 50%; 
+    cursor: pointer; 
+  }
+  
+  .lock-screen { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 400px; 
+    padding: 2rem; 
+  }
+  
+  .pin-dots { 
+    display: flex; 
+    gap: 12px; 
+    margin-bottom: 20px; 
+  }
+  
+  .pin-dot { 
+    width: 14px; 
+    height: 14px; 
+    border-radius: 50%; 
+    border: 2px solid #ddd; 
+  }
+  
+  .pin-dot.filled { 
+    background: #E53935; 
+    border-color: #E53935; 
+  }
+  
+  .pin-pad { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
+    width: 240px; 
+  }
+  
+  .pin-key { 
+    padding: 16px; 
+    border-radius: 50%; 
+    border: 1px solid #eee; 
+    background: #fafafa; 
+    font-size: 20px; 
+    cursor: pointer; 
+  }
+
+  /* 照片上傳 */
+  .airport-img-box { 
+    width: 100%; 
+    height: 160px; 
+    border: 2px dashed #ddd; 
+    border-radius: 10px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-top: 10px; 
+    overflow: hidden; 
+    background: #fafafa; 
+    cursor: pointer; 
+  }
+  
+  .airport-img-box img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+  }
+
+  /* 彈出視窗與提示 */
+  .modal-overlay { 
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.55); 
+    z-index: 200; 
+    align-items: flex-end; 
+    justify-content: center; 
+  }
+  
+  .modal-overlay.show { 
+    display: flex; 
+  }
+  
+  .modal { 
+    background: #fff; 
+    border-radius: 20px 20px 0 0; 
+    padding: 1.5rem 1.25rem 2rem; 
+    width: 100%; 
+    max-width: 480px; 
+    max-height: 88vh; 
+    overflow-y: auto; 
+  }
+  
+  .toast { 
+    position: fixed; 
+    bottom: 80px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: #222; 
+    color: white; 
+    padding: 10px 20px; 
+    border-radius: 25px; 
+    font-size: 13px; 
+    opacity: 0; 
+    transition: 0.3s; 
+    z-index: 999; 
+    pointer-events: none; 
+  }
+  
+  .toast.show { 
+    opacity: 1; 
   }
 </style>
 </head>
@@ -565,39 +596,39 @@
       <p style="font-size:12px; color:#888;">點擊下方方框可上傳實景照片儲存</p>
     </div>
     <div class="card">
-      <p>1. 領行李 → 出 Exit B</p>
-      <div class="img-upload-box" onclick="triggerAirportUpload(1)" id="airport-img-1">
-        <span>📷 上傳照片</span>
+      <p>步驟 1: 領行李 → 出 Exit B</p>
+      <div class="airport-img-box" onclick="triggerAirportUpload(1)" id="airport-img-1">
+        <span>📷 點擊上傳照片</span>
       </div>
     </div>
     <div class="card">
-      <p>2. 出口向右轉</p>
-      <div class="img-upload-box" onclick="triggerAirportUpload(2)" id="airport-img-2">
-        <span>📷 上傳照片</span>
+      <p>步驟 2: 出口向右轉</p>
+      <div class="airport-img-box" onclick="triggerAirportUpload(2)" id="airport-img-2">
+        <span>📷 點擊上傳照片</span>
       </div>
     </div>
     <div class="card">
-      <p>3. 走到 4 號出口附近</p>
-      <div class="img-upload-box" onclick="triggerAirportUpload(3)" id="airport-img-3">
-        <span>📷 上傳照片</span>
+      <p>步驟 3: 走到 4 號出口附近</p>
+      <div class="airport-img-box" onclick="triggerAirportUpload(3)" id="airport-img-3">
+        <span>📷 點擊上傳照片</span>
       </div>
     </div>
     <div class="card">
-      <p>4. 找「Hello 你好」紅色櫃檯</p>
-      <div class="img-upload-box" onclick="triggerAirportUpload(4)" id="airport-img-4">
-        <span>📷 上傳照片</span>
+      <p>步驟 4: 找「Hello 你好」紅色櫃檯</p>
+      <div class="airport-img-box" onclick="triggerAirportUpload(4)" id="airport-img-4">
+        <span>📷 點擊上傳照片</span>
       </div>
     </div>
     <div class="card">
-      <p>5. 出示信件拿名牌</p>
-      <div class="img-upload-box" onclick="triggerAirportUpload(5)" id="airport-img-5">
-        <span>📷 上傳照片</span>
+      <p>步驟 5: 出示信件拿名牌</p>
+      <div class="airport-img-box" onclick="triggerAirportUpload(5)" id="airport-img-5">
+        <span>📷 點擊上傳照片</span>
       </div>
     </div>
     <div class="card">
-      <p>6. 過斑馬線到月台上車</p>
-      <div class="img-upload-box" onclick="triggerAirportUpload(6)" id="airport-img-6">
-        <span>📷 上傳照片</span>
+      <p>步驟 6: 過斑馬線到月台上車</p>
+      <div class="airport-img-box" onclick="triggerAirportUpload(6)" id="airport-img-6">
+        <span>📷 點擊上傳照片</span>
       </div>
     </div>
     <input type="file" id="airport-file-input" accept="image/*" onchange="handleAirportUpload(event)" style="display:none;">
@@ -605,7 +636,8 @@
 
   <div id="itinerary" class="section">
     <div class="pt"></div>
-    <div class="itinerary-box">
+    <div class="itinerary">
+      
       <div class="day-row" onclick="toggleDay('d1')">
         <div class="day-dot"></div>
         <div class="day-info">
@@ -618,24 +650,52 @@
         <div class="stop-block">
           <div class="stop-time">11:10</div>
           <div class="stop-name">素萬那普機場抵達</div>
-          <div class="stop-note">按流程找接機人員</div>
+          <div class="stop-note">找接機人員上車</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Suvarnabhumi Airport', 'Hyatt Place Sukhumvit')">🚕 叫車往飯店</button>
+          </div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">12:30</div>
+          <div class="stop-name">Hyatt Place Bangkok Sukhumvit</div>
+          <div class="stop-note">飯店寄放行李，輕裝出發</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Hyatt Place Sukhumvit', 'Chatuchak Weekend Market')">🚕 叫車往恰圖洽</button>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">13:48</div>
           <div class="stop-name">恰圖洽週末市集</div>
-          <div class="stop-note">週日限定採買</div>
+          <div class="stop-note">週日限定，黃金挖寶時間</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Chatuchak Weekend Market', 'Chulalongkorn University')">🚕 叫車往朱拉商圈</button>
+          </div>
         </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">18:30</div>
           <div class="stop-name">朱拉 50 巷廚房</div>
-          <div class="stop-note">滑蛋蟹肉飯</div>
+          <div class="stop-note">晚餐：招牌滑蛋蟹肉飯</div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">19:30</div>
+          <div class="stop-name">朱拉隆功夜市 (Banthat Thong)</div>
+          <div class="stop-note">飯後散步消食</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Chulalongkorn', 'Nature Thai Massage Sukhumvit 24')">🚕 叫車往按摩店</button>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">21:30</div>
           <div class="stop-name">Nature Thai Massage</div>
-          <div class="stop-note">蘇坤蔚 24 巷按摩</div>
+          <div class="stop-note">蘇坤蔚 24 巷，按摩放鬆</div>
         </div>
       </div>
+
       <div class="day-row" onclick="toggleDay('d2')">
         <div class="day-dot"></div>
         <div class="day-info">
@@ -647,24 +707,55 @@
       <div id="d2" class="day-detail">
         <div class="stop-block">
           <div class="stop-time">08:00</div>
-          <div class="stop-name">包車出發</div>
+          <div class="stop-name">全日包車出發</div>
+          <div class="stop-note">飯店門口上車</div>
         </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">10:30</div>
           <div class="stop-name">大城獅子王動物園</div>
-          <div class="stop-note">長頸鹿合照</div>
+          <div class="stop-note">吉普車長頸鹿合照 · 牽老虎散步</div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">12:30</div>
+          <div class="stop-name">大城中央蝦市場</div>
+          <div class="stop-note">買糖絲春捲</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">13:45</div>
+          <div class="stop-name">瑪哈泰寺 (Wat Mahathat)</div>
+          <div class="stop-note">樹中佛頭</div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">14:45</div>
           <div class="stop-name">柴瓦塔那蘭寺</div>
-          <div class="stop-note">泰服體驗拍照</div>
+          <div class="stop-note">換帥氣泰服拍照 (有褲裝可選)</div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">15:45</div>
+          <div class="stop-name">KlongSrabua 船麵餐廳</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">16:30</div>
+          <div class="stop-name">長尾船護城河</div>
+          <div class="stop-note">看大象戲水</div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">18:00</div>
           <div class="stop-name">Save One Go 夜市</div>
-          <div class="stop-note">平價美食吃到飽</div>
+          <div class="stop-note">包車於此結束，在地平價美食</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Save One Go Market', 'Hyatt Place Sukhumvit')">🚕 叫車回飯店</button>
+          </div>
         </div>
       </div>
+
       <div class="day-row" onclick="toggleDay('d3')">
         <div class="day-dot"></div>
         <div class="day-info">
@@ -675,19 +766,52 @@
       </div>
       <div id="d3" class="day-detail">
         <div class="stop-block">
+          <div class="stop-time">10:00</div>
+          <div class="stop-name">睡到自然醒 😴</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Hyatt Place Sukhumvit', 'Asiatique The Riverfront')">🚕 叫車往河濱碼頭</button>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
           <div class="stop-time">12:00</div>
           <div class="stop-name">侏羅紀世界展 (Asiatique)</div>
+          <div class="stop-note">門票已購，位於河濱碼頭</div>
         </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">13:50</div>
           <div class="stop-name">ICONSIAM 逛街</div>
+          <div class="stop-note">室內水上市場</div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">18:37</div>
+          <div class="stop-name">After You Dessert Café</div>
+          <div class="stop-note">ICONSIAM 分店</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('ICONSIAM', 'Kodtalay Seafood RCA')">🚕 叫車往 RCA</button>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">20:30</div>
           <div class="stop-name">Kodtalay Seafood Buffet</div>
-          <div class="stop-note">RCA 海鮮吃到飽</div>
+          <div class="stop-note">RCA 區海鮮吃到飽</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Kodtalay Seafood RCA', 'Jodd Fairs Ratchada')">🚕 叫車往夜市</button>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">22:45</div>
+          <div class="stop-name">新喬德夜市 (JODD FAIRS)</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Jodd Fairs Ratchada', 'Hyatt Place Sukhumvit')">🚕 叫車回飯店</button>
+          </div>
         </div>
       </div>
+
       <div class="day-row" onclick="toggleDay('d4')">
         <div class="day-dot"></div>
         <div class="day-info">
@@ -698,18 +822,49 @@
       </div>
       <div id="d4" class="day-detail">
         <div class="stop-block">
+          <div class="stop-time">09:30</div>
+          <div class="stop-name">飯店叫外送 🛵</div>
+          <div class="stop-note">Grab Food 點 Phed Mark 打拋豬</div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
           <div class="stop-time">11:00</div>
           <div class="stop-name">BENKOFF 臘腸狗咖啡廳</div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">12:30</div>
+          <div class="stop-name">Hirono Floating Market</div>
+          <div class="stop-note">Siam Square 尋找小野限定店</div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">13:30</div>
-          <div class="stop-name">Central World · POP MART</div>
+          <div class="stop-name">Central World · POP MART 旗艦店</div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">18:30</div>
+          <div class="stop-name">Savoey 建興酒家</div>
+          <div class="stop-note">Mercury Ville 分店</div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">20:30</div>
           <div class="stop-name">Big C Ratchadamri</div>
+          <div class="stop-note">最後伴手禮掃貨時間</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Big C Ratchadamri', 'Makkha Health & Spa Sukhumvit 24')">🚕 叫車往按摩店</button>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">22:00</div>
+          <div class="stop-name">Makkha Health & Spa</div>
+          <div class="stop-note">Sukhumvit 24 按摩</div>
         </div>
       </div>
+
       <div class="day-row" onclick="toggleDay('d5')">
         <div class="day-dot"></div>
         <div class="day-info">
@@ -722,12 +877,25 @@
         <div class="stop-block">
           <div class="stop-time">08:30</div>
           <div class="stop-name">飯店退房</div>
+          <div class="stop-note">最後行李打包</div>
+          <div class="stop-actions">
+            <button class="ride-mini" onclick="fillAndRide('Hyatt Place Sukhumvit', 'Suvarnabhumi Airport')">🚕 叫車前往機場</button>
+          </div>
         </div>
+        <div class="arrow-down">↓</div>
+        <div class="stop-block">
+          <div class="stop-time">08:30</div>
+          <div class="stop-name">前往素萬那普機場</div>
+          <div class="stop-note">曼谷易塞車，務必準時出發</div>
+        </div>
+        <div class="arrow-down">↓</div>
         <div class="stop-block">
           <div class="stop-time">12:25</div>
-          <div class="stop-name">BR206 起飛</div>
+          <div class="stop-name">班機 BR206 起飛</div>
+          <div class="stop-note">帶著滿滿戰利品平安回台 🎉</div>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -740,11 +908,14 @@
       <button class="budget-btn" style="background:#444; margin-bottom:10px;" onclick="swapPlaces()">⇅ 對調位置</button>
       
       <div style="margin-bottom:10px;">
-        <span class="ride-chip" onclick="fillPlace('from', 'Hyatt Place Sukhumvit')">🏨 飯店</span>
+        <span class="ride-chip" onclick="fillPlace('from', 'Hyatt Place Sukhumvit')">🏨 飯店起點</span>
+        <span class="ride-chip" onclick="fillPlace('to', 'Hyatt Place Sukhumvit')">🏨 飯店終點</span>
         <span class="ride-chip" onclick="fillPlace('to', 'Suvarnabhumi Airport')">✈ 機場</span>
+        <span class="ride-chip" onclick="fillPlace('to', 'Chatuchak Weekend Market')">🎪 恰圖洽</span>
         <span class="ride-chip" onclick="fillPlace('to', 'ICONSIAM')">🛍 ICONSIAM</span>
+        <span class="ride-chip" onclick="fillPlace('to', 'Big C Ratchadamri')">🛒 Big C</span>
       </div>
-      
+
       <div class="ride-app-grid">
         <a class="ride-app-link" style="background:#00B14F;" href="#" onclick="goRide('grab')">Grab</a>
         <a class="ride-app-link" style="background:#34C759;" href="#" onclick="goRide('bolt')">Bolt</a>
@@ -839,21 +1010,23 @@
     <div id="qr-content" style="display:none;">
       <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
         <h3 style="font-size:16px;">🎫 票券與 QR</h3>
-        <button onclick="lockQR()" style="font-size:11px; padding:4px 8px; border-radius:6px; border:1px solid #ddd; background:#fff;">🔒 鎖定</button>
+        <button onclick="lockQR()" style="font-size:11px; padding:4px 8px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer;">🔒 鎖定</button>
       </div>
       <div class="qr-grid" id="qr-grid-container">
         </div>
       <button class="budget-btn" style="margin-top:15px; background:#444;" onclick="openAddTicketModal()">➕ 新增自訂票券</button>
     </div>
   </div>
+
 </div>
 
 <div class="modal-overlay" id="rateModal" onclick="closeModal(event,'rateModal')">
   <div class="modal">
-    <h3>💱 匯率換算</h3>
-    <div style="margin-top:15px;">
-      <input type="number" id="calc-thb" class="budget-input" placeholder="泰銖 (THB)" oninput="calcExchange('thb')">
-      <input type="number" id="calc-twd" class="budget-input" placeholder="台幣 (TWD)" oninput="calcExchange('twd')">
+    <h3 style="margin-bottom:15px;">💱 泰銖 ↔ 台幣換算</h3>
+    <input type="number" id="calc-thb" class="budget-input" placeholder="輸入泰銖 (THB)" oninput="calcExchange('thb')">
+    <input type="number" id="calc-twd" class="budget-input" placeholder="等值台幣 (TWD)" oninput="calcExchange('twd')">
+    <div style="margin-top:10px; background:#F1F8E9; padding:10px; border-radius:10px; font-size:12px; color:#2E7D32;">
+      💡 現金支付夜市。刷卡選免海外手續費信用卡，結帳一律選「泰銖(THB)」。
     </div>
     <button class="budget-btn" style="margin-top:15px; background:#E53935;" onclick="document.getElementById('rateModal').classList.remove('show')">關閉</button>
   </div>
@@ -924,10 +1097,13 @@ function switchTab(id) {
 
 function toggleDay(id) { 
   const el = document.getElementById(id); 
+  const arrow = el.previousElementSibling.querySelector('span');
   if (el.style.display === 'block') {
     el.style.display = 'none';
+    if(arrow) arrow.textContent = '›';
   } else {
     el.style.display = 'block';
+    if(arrow) arrow.textContent = '⌄';
   }
 }
 
@@ -1026,6 +1202,7 @@ async function fetchExpenses() {
     
     document.getElementById('total-spent').textContent = '฿ ' + total.toLocaleString();
     document.getElementById('total-twd').textContent = '≈ NT$ ' + Math.round(total * THB_RATE).toLocaleString();
+    showToast('帳本已更新');
   } catch (error) { 
     list.innerHTML = '<p style="text-align:center; padding:20px; color:red;">雲端連線失敗</p>'; 
   }
@@ -1053,35 +1230,64 @@ async function deleteExpense(id) {
 // ==========================================
 const PHRASES = {
   hotel: [
-    {th:"เช็คอิน", zh:"入住", r:"Check-in"}, 
-    {th:"ขอฝากกระเป๋า", zh:"寄放行李", r:"Kho fak krapao"}, 
-    {th:"รหัส Wifi คืออะไร", zh:"Wifi 密碼", r:"Rahat Wifi"}, 
+    {th:"เช็คอิน", zh:"我要辦理入住", r:"Chek-in"}, 
+    {th:"ห้องของฉันอยู่ที่ไหน", zh:"我的房間在哪？", r:"Hong khong chan yu thi nai?"}, 
+    {th:"ขอฝากกระเป๋า", zh:"可以先寄放行李嗎？", r:"Kho fak krapao"}, 
+    {th:"รหัส Wifi คืออะไร", zh:"Wifi 密碼是什麼？", r:"Rahat Wifi"}, 
     {th:"แอร์ไม่เย็น", zh:"冷氣不冷", r:"Ae mai yen"}, 
-    {th:"เช็คเอาท์", zh:"退房", r:"Check-out"}
+    {th:"ขอผ้าเช็ดตัวเพิ่ม", zh:"我需要毛巾", r:"Kho pha chet tua"}, 
+    {th:"ช่วยทำความสะอาดห้องหน่อย", zh:"請幫我打掃房間", r:"Chuay tham khwaam sa-àat"},
+    {th:"เช็คเอาท์", zh:"我要退房", r:"Chek-aut"},
+    {th:"เช็คเอาท์กี่โมง", zh:"幾點退房？", r:"Chék-àut kìi moong"},
+    {th:"ช่วยเรียกแท็กซี่หน่อย", zh:"請幫我叫計程車", r:"Chuay riak taxi noi"}
   ],
   night: [
     {th:"ราคาเท่าไหร่", zh:"多少錢？", r:"Rakha thao rai?"}, 
-    {th:"ลดหน่อยได้ไหม", zh:"便宜點？", r:"Rot noi?"}, 
-    {th:"แพงเกินไป", zh:"太貴了", r:"Phaeng koen"}, 
-    {th:"สแกน QR ได้ไหม", zh:"掃碼？", r:"Scan QR?"}, 
+    {th:"ลดหน่อยได้ไหม", zh:"便宜一點可以嗎？", r:"Rot noi dai mai?"}, 
+    {th:"แพงเกินไป", zh:"太貴了", r:"Phaeng koen pai"}, 
+    {th:"ลดได้เท่าไหร่", zh:"最低能多少？", r:"Rot dai thao rai?"}, 
+    {th:"ราคาสุดท้ายเท่าไหร่", zh:"最後價格是多少？", r:"Rakha sut thai thao rai?"},
+    {th:"ซื้อเยอะ ลดหน่อย", zh:"買很多，算便宜點", r:"Sue yoe, rot noi"},
+    {th:"สแกน QR ได้ไหม", zh:"可以掃碼支付嗎？", r:"Scan QR?"}, 
+    {th:"ไม่เอาถุง", zh:"不需要塑膠袋", r:"Mai ao thung"},
+    {th:"มีสีอื่นไหม", zh:"有別的顏色嗎？", r:"Mii si uen mai?"},
     {th:"เอาอันนี้", zh:"我要這個", r:"Ao an ni"}
   ],
   food: [
-    {th:"สั่งอาหารหน่อย", zh:"點餐", r:"Sang ahan"}, 
+    {th:"สั่งอาหารหน่อย", zh:"我要點餐", r:"Sang ahan noi"}, 
     {th:"ไม่เผ็ด", zh:"不要辣", r:"Mai phet"}, 
     {th:"ไม่ใส่ผักชี", zh:"不要香菜", r:"Mai sai phak-chi"}, 
-    {th:"อร่อยมาก", zh:"超好吃", r:"Aroi mak"}, 
-    {th:"เก็บเงินด้วย", zh:"買單", r:"Kep ngoen"}
+    {th:"อร่อยมาก", zh:"非常好吃", r:"Aroi mak"}, 
+    {th:"ขอเมนูภาษาอังกฤษ", zh:"請給我英文菜單", r:"Kho menu phasa ang-krit"},
+    {th:"แพ้อาหารทะเล", zh:"我對海鮮過敏", r:"Phae ahan thale"},
+    {th:"เอาน้ำแข็งด้วย", zh:"我需要冰塊", r:"Ao nam khaeng duay"},
+    {th:"สองท่าน", zh:"兩位", r:"Song than"},
+    {th:"เก็บเงินด้วย", zh:"買單", r:"Kep ngoen duay"}, 
+    {th:"ห่อกลับบ้าน", zh:"我要打包", r:"Ho klap ban"}
   ],
   mall: [
-    {th:"ทำ VAT Refund ที่ไหน", zh:"退稅在哪？", r:"VAT Refund?"}, 
-    {th:"รูดบัตรได้ไหม", zh:"刷卡？", r:"Rap bat?"}, 
-    {th:"มีส่วนลดไหม", zh:"有折扣？", r:"Mii suan rot?"}
+    {th:"ทำ VAT Refund ที่ไหน", zh:"退稅櫃檯在哪裡？", r:"VAT Refund thi nai?"}, 
+    {th:"ต้องช้อปเท่าไหร่ถึงจะคืนภาษีได้", zh:"買多少錢才能退稅？", r:"Tong shop thao rai..."},
+    {th:"ขอใบกำกับภาษีหน่อย", zh:"請給我稅單/發票", r:"Kho bai kam kap phasi"},
+    {th:"ซุปเปอร์มาร์เก็ตอยู่ที่ไหน", zh:"超市在哪裡？", r:"Supermarket yu thi nai?"},
+    {th:"ห้องลองชุดอยู่ที่ไหน", zh:"試衣間在哪裡？", r:"Hong long chut yu thi nai?"},
+    {th:"ขอดูเฉยๆ", zh:"我只是看看", r:"Kho du choei choei"}, 
+    {th:"รูดบัตรได้ไหม", zh:"可以刷卡嗎？", r:"Rap bat khredit?"}, 
+    {th:"มีส่วนลดไหม", zh:"有打折嗎？", r:"Mii suan rot mai?"},
+    {th:"ลิฟต์อยู่ที่ไหน", zh:"電梯在哪裡？", r:"Lift yu thi nai?"},
+    {th:"มีของใหม่ไหม", zh:"有新的嗎？", r:"Mii khong mai mai?"}
   ],
   sos: [
-    {th:"ช่วยด้วย", zh:"救命", r:"Chuay duay"}, 
-    {th:"โรงพยาบาล", zh:"醫院", r:"Rong phayaban"}, 
-    {th:"ไม่สบาย", zh:"不舒服", r:"Mai sabai"}
+    {th:"ช่วยด้วย", zh:"救命 / 幫幫我", r:"Chuay duay"}, 
+    {th:"ฉันรู้สึกไม่สบาย", zh:"我覺得不舒服", r:"Chan mai sabai"}, 
+    {th:"ฉันปวดหัว", zh:"我頭痛", r:"Chan puat hua"},
+    {th:"อยากไปหาหมอ", zh:"我想看醫生", r:"Yak pai ha mor"},
+    {th:"ช่วยพาไปโรงพยาบาลหน่อย", zh:"請帶我去醫院", r:"Chuay pha pai rong phayaban"},
+    {th:"โรงพยาบาลที่ใกล้ที่สุด", zh:"最近的醫院在哪？", r:"Rong phayaban thi klai"}, 
+    {th:"เรียกหน่วยกู้ภัยหน่อย", zh:"請幫我叫救護車", r:"Riak nuai ku phai"},
+    {th:"เรียกตำรวจให้หน่อย", zh:"請幫我報警", r:"Riak tam-ruat"},
+    {th:"พาสปอร์ตหาย", zh:"護照不見了", r:"Passport haai"},
+    {th:"ฉันหลงทาง", zh:"我迷路了", r:"Chan long thang"}
   ]
 };
 
@@ -1103,6 +1309,7 @@ function switchPhrase(cat, el) {
     div.innerHTML = `
       <div class="phrase-thai">${p.th}</div>
       <div class="phrase-zh">${p.zh}</div>
+      <div style="font-size:10px; color:#aaa; margin-bottom:5px;">${p.r}</div>
       <div class="sound-row">
         <button class="sound-btn" onclick="window.open('https://translate.google.com/?sl=th&tl=zh-TW&text=' + encodeURIComponent('${p.th}'))">翻譯</button>
         <button class="sound-btn" onclick="tts('${p.th}')">發音</button>
@@ -1126,6 +1333,8 @@ function doTranslate() {
   const text = document.getElementById('custom-zh').value; 
   if (text) {
     window.open('https://translate.google.com/?sl=zh-TW&tl=th&text=' + encodeURIComponent(text)); 
+  } else {
+    showToast('請先輸入中文');
   }
 }
 
@@ -1134,6 +1343,7 @@ function doTranslate() {
 // ==========================================
 function fillPlace(field, value) { 
   document.getElementById(field + '-input').value = value; 
+  showToast('已填入');
 }
 
 function swapPlaces() { 
@@ -1142,6 +1352,13 @@ function swapPlaces() {
   const temp = fromInput.value;
   fromInput.value = toInput.value;
   toInput.value = temp;
+}
+
+function fillAndRide(fromLocation, toLocation) {
+  document.getElementById('from-input').value = fromLocation;
+  document.getElementById('to-input').value = toLocation;
+  switchTab('ride');
+  showToast('路線已填入，請點擊叫車 App');
 }
 
 function goRide(id) { 
@@ -1155,7 +1372,7 @@ function goRide(id) {
   } else if (id === 'bolt') {
     window.location.href = 'taxify://'; 
   } else {
-    window.location.href = 'http://googleusercontent.com/maps.google.com/9' + encodeURIComponent(to); 
+    window.location.href = 'https://www.google.com/maps/search/massage+near+me0' + encodeURIComponent(to); 
   }
 }
 
@@ -1186,7 +1403,8 @@ let tickets = JSON.parse(localStorage.getItem('my_tickets')) || [
   {id:'esim2', name:'eSIM 2', sub:'小柔'}, 
   {id:'dino1', name:'侏羅紀 1', sub:'小允'}, 
   {id:'dino2', name:'侏羅紀 2', sub:'小柔'}, 
-  {id:'hotel', name:'飯店訂單', sub:'Hyatt'}
+  {id:'hotel', name:'飯店訂單', sub:'Hyatt Place'},
+  {id:'car', name:'大城包車', sub:'5/11 全日'}
 ];
 
 function renderTickets() { 
@@ -1201,7 +1419,7 @@ function renderTickets() {
       <div onclick="showQR('${tk.id}')">
         <div style="font-size:24px; margin-bottom:5px;">🎫</div>
         <div style="font-size:13px; font-weight:700;">${tk.name}</div>
-        <div style="font-size:10px; color:#999;">${tk.sub}</div>
+        <div style="font-size:10px; color:#999; margin-top:2px;">${tk.sub}</div>
       </div>
     `; 
     container.appendChild(div); 
@@ -1216,6 +1434,7 @@ function saveNewTicket() {
   const name = document.getElementById('new-ticket-name').value; 
   const sub = document.getElementById('new-ticket-sub').value;
   if (!name) {
+    showToast('請填寫名稱');
     return;
   }
   const id = 'tk_' + Date.now(); 
@@ -1249,10 +1468,11 @@ function showQR(id) {
   }
   document.getElementById('qr-modal-title').textContent = tk.name; 
   const savedImg = localStorage.getItem('qr_img_' + id); 
+  const display = document.getElementById('qr-img-display');
   if (savedImg) {
-    document.getElementById('qr-img-display').innerHTML = `<img src="${savedImg}" style="max-width:100%;">`;
+    display.innerHTML = `<img src="${savedImg}" style="max-width:100%;">`;
   } else {
-    document.getElementById('qr-img-display').innerHTML = '<span>尚未上傳圖片</span>';
+    display.innerHTML = `<span style="color:#aaa;">尚未上傳照片</span>`;
   }
   document.getElementById('qrModal').classList.add('show'); 
 }
@@ -1266,6 +1486,7 @@ function handleQRUpload(e) {
   reader.onload = function(ev) { 
     localStorage.setItem('qr_img_' + curTkId, ev.target.result); 
     document.getElementById('qr-img-display').innerHTML = `<img src="${ev.target.result}" style="max-width:100%;">`; 
+    showToast('票券已儲存');
   }; 
   reader.readAsDataURL(file); 
 }
@@ -1329,7 +1550,7 @@ function openRateModal() {
 }
 
 function closeModal(e, id) { 
-  if (e.target.id === id) {
+  if (e.target.id === id || e.target.classList.contains('modal-close')) {
     document.getElementById(id).classList.remove('show'); 
   }
 }
