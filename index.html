@@ -80,7 +80,7 @@
   .pin-key.del { font-size: 16px; }
   .pin-error { color: #E53935; font-size: 13px; margin-top: 8px; min-height: 20px; }
 
-  /* QR Code 區 */
+  /* QR Code 區 & 機場照片區 */
   .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .qr-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); text-align: center; cursor: pointer; }
   .qr-card:active { background: #fafafa; }
@@ -93,6 +93,8 @@
   .qr-big-sub { font-size: 12px; color: #888; margin-bottom: 12px; }
   .qr-note { font-size: 12px; color: #666; background: #FFF3E0; border-radius: 8px; padding: 8px 12px; line-height: 1.6; }
   .qr-add-btn { width: 100%; padding: 12px; border-radius: 10px; background: #E53935; color: white; border: none; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+  .airport-img-box { width: 100%; height: 180px; border: 2px dashed #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-top: 10px; background: #fafafa; font-size: 13px; color: #aaa; cursor: pointer; overflow: hidden; }
+  .airport-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
   /* 機場流程 */
   .airport-hero { background: linear-gradient(135deg, #1565C0, #0D47A1); border-radius: 14px; padding: 1rem 1.2rem; color: white; margin-bottom: 14px; }
@@ -105,7 +107,6 @@
   .step-sub { font-size: 12px; color: #888; margin-top: 2px; }
   .step-body { font-size: 13px; color: #444; line-height: 1.7; }
   .step-highlight { background: #FFF8E1; border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 500; color: #E65100; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
-  .step-img-placeholder { background: #f0f4ff; border-radius: 10px; padding: 12px; text-align: center; margin-top: 8px; font-size: 12px; color: #5c6bc0; }
   .contact-box { background: #E3F2FD; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
   .contact-box h3 { font-size: 14px; font-weight: 600; color: #1565C0; margin-bottom: 6px; }
   .contact-box p { font-size: 13px; color: #333; line-height: 1.7; }
@@ -266,7 +267,7 @@
         領取行李後，直接找 <strong>「B 出口（Exit B）」</strong>，不要走其他出口。
       </div>
       <div class="step-highlight">🟡 黑底黃字的 B 出口招牌，很醒目</div>
-      <img src="https://via.placeholder.com/400x200?text=將此網址換成你的照片" style="width:100%; border-radius:10px; margin-top:10px; display:block;" alt="接機參考圖">
+      <div class="airport-img-box" id="airport-img-1" onclick="triggerAirportUpload(1)"><span>📷 點擊上傳接機照片</span></div>
     </div>
 
     <div class="step-card">
@@ -281,7 +282,7 @@
         出來後會看到大型黑色指示牌（含中英文），<strong>面對指標向右轉</strong>，繼續直走。
       </div>
       <div class="step-highlight">➡️ 看到指標，向右轉！</div>
-      <img src="https://via.placeholder.com/400x200?text=將此網址換成你的照片" style="width:100%; border-radius:10px; margin-top:10px; display:block;" alt="接機參考圖">
+      <div class="airport-img-box" id="airport-img-2" onclick="triggerAirportUpload(2)"><span>📷 點擊上傳接機照片</span></div>
     </div>
 
     <div class="step-card">
@@ -296,7 +297,7 @@
         沿著走道繼續直行，看到 <strong>「4 號出口」</strong> 的圓形黃色標誌，繼續直行不要出去。
       </div>
       <div class="step-highlight">🟡 看到圓形黃底「4」號標誌，繼續直行</div>
-      <img src="https://via.placeholder.com/400x200?text=將此網址換成你的照片" style="width:100%; border-radius:10px; margin-top:10px; display:block;" alt="接機參考圖">
+      <div class="airport-img-box" id="airport-img-3" onclick="triggerAirportUpload(3)"><span>📷 點擊上傳接機照片</span></div>
     </div>
 
     <div class="step-card">
@@ -311,7 +312,7 @@
         在 4 號門旁有大量接機牌的圍欄，找 <strong>紅底白字的「你好 HELLO」</strong> 標誌，就是接機服務台。
       </div>
       <div class="step-highlight">🔴 找紅色「你好 HELLO」牌子</div>
-      <img src="https://via.placeholder.com/400x200?text=將此網址換成你的照片" style="width:100%; border-radius:10px; margin-top:10px; display:block;" alt="接機參考圖">
+      <div class="airport-img-box" id="airport-img-4" onclick="triggerAirportUpload(4)"><span>📷 點擊上傳接機照片</span></div>
     </div>
 
     <div class="step-card">
@@ -326,7 +327,7 @@
         向工作人員出示 <strong>Booking Confirmation（訂購確認信）</strong>，核對後會給你一張印有你名字的確認單，然後在原地等待 <strong>10-15 分鐘</strong>。
       </div>
       <div class="step-highlight">📄 出示確認信 → 等待工作人員叫你</div>
-      <img src="https://via.placeholder.com/400x200?text=將此網址換成你的照片" style="width:100%; border-radius:10px; margin-top:10px; display:block;" alt="接機參考圖">
+      <div class="airport-img-box" id="airport-img-5" onclick="triggerAirportUpload(5)"><span>📷 點擊上傳接機照片</span></div>
     </div>
 
     <div class="step-card">
@@ -341,13 +342,15 @@
         工作人員通知後，走過 <strong>4 號出口的大門</strong>，再穿過 <strong>紅白斑馬線到中間月台</strong>，在月台等待接送車輛到來。
       </div>
       <div class="step-highlight">🚐 過斑馬線到中間月台，等車上車！</div>
-      <img src="https://via.placeholder.com/400x200?text=將此網址換成你的照片" style="width:100%; border-radius:10px; margin-top:10px; display:block;" alt="接機參考圖">
+      <div class="airport-img-box" id="airport-img-6" onclick="triggerAirportUpload(6)"><span>📷 點擊上傳接機照片</span></div>
     </div>
    
     <div style="background:#E8F5E9;border-radius:12px;padding:12px 14px;font-size:13px;color:#2E7D32;line-height:1.7;margin-top:4px;">
       ✅ <strong>重點整理：</strong><br>
       行李 → B出口 → 右轉 → 直行 → 4號門旁 → 找「你好HELLO」→ 出示確認信 → 等叫 → 過斑馬線上車
     </div>
+
+    <input type="file" id="airport-file-input" accept="image/*" onchange="handleAirportUpload(event)" style="display:none;">
   </div>
 
   <div id="itinerary" class="section">
@@ -683,6 +686,36 @@
 // ── 固定飯店 ──
 const HOTEL_ADDR = '2 Sukhumvit Soi 13, Khlong Toei Nuea, Watthana, Bangkok (Hyatt Place)';
 
+// ── 機場照片上傳邏輯 ──
+let currentAirportStep = null;
+
+function triggerAirportUpload(step) {
+  currentAirportStep = step;
+  document.getElementById('airport-file-input').click();
+}
+
+function handleAirportUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const dataUrl = ev.target.result;
+    localStorage.setItem('airport_img_' + currentAirportStep, dataUrl);
+    document.getElementById('airport-img-' + currentAirportStep).innerHTML = `<img src="${dataUrl}" alt="接機照片">`;
+    showToast('機場接機照片已儲存！');
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadAirportImages() {
+  for (let i = 1; i <= 6; i++) {
+    const saved = localStorage.getItem('airport_img_' + i);
+    if (saved) {
+      document.getElementById('airport-img-' + i).innerHTML = `<img src="${saved}" alt="接機照片">`;
+    }
+  }
+}
+
 // ── PIN 密碼邏輯 ──
 const CORRECT_PIN = '0105';
 let currentPin = '';
@@ -712,7 +745,6 @@ function checkPin() {
     document.getElementById('qr-content').style.display = 'block';
     document.getElementById('pin-error').textContent = '';
     isUnlocked = true;
-    loadQRData();
   } else {
     document.getElementById('pin-error').textContent = '密碼錯誤，請再試一次';
     currentPin = '';
@@ -739,10 +771,6 @@ const QR_ITEMS = {
   airport:{ name: '機場接送確認', sub: '抵達素萬那普機場時出示' }
 };
 let currentQRId = null;
-
-function loadQRData() {
-  // 載入已儲存的 QR
-}
 
 function showQR(id) {
   currentQRId = id;
@@ -932,6 +960,10 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+// 啟動時載入已儲存的機場照片
+document.addEventListener('DOMContentLoaded', loadAirportImages);
+
 </script>
 </body>
 </html>
