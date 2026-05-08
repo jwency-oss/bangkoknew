@@ -124,6 +124,63 @@
   .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem 1.25rem 2rem; width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto; }
   .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #222; color: white; padding: 10px 20px; border-radius: 25px; font-size: 13px; opacity: 0; transition: 0.3s; z-index: 999; pointer-events: none; }
   .toast.show { opacity: 1; }
+
+  /* ══ 記事頁 ══ */
+  .notes-hero { background: linear-gradient(135deg, #6A1B9A, #4527A0); border-radius: 14px; padding: 1rem 1.2rem; color: white; margin-bottom: 14px; }
+  .notes-hero h2 { font-size: 17px; font-weight: 600; margin-bottom: 3px; }
+  .notes-hero p { font-size: 12px; opacity: 0.85; line-height: 1.5; }
+  .notes-type-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+  .notes-type-btn { flex: 1; padding: 10px 4px; border-radius: 10px; border: 1.5px solid #ddd; background: #fff; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; color: #666; }
+  .notes-type-btn.active { background: #6A1B9A; color: white; border-color: #6A1B9A; }
+  .note-compose { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .note-compose textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fafafa; resize: none; font-family: inherit; line-height: 1.6; }
+  .note-compose textarea:focus { outline: none; border-color: #6A1B9A; }
+  .note-img-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin: 8px 0; display: block; }
+  .note-submit-btn { width: 100%; padding: 11px; border-radius: 10px; border: none; background: #6A1B9A; color: white; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  .note-submit-btn:active { opacity: 0.8; }
+  .todo-input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .todo-input { flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fafafa; }
+  .todo-add-btn { padding: 10px 16px; border-radius: 10px; border: none; background: #6A1B9A; color: white; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .todo-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .todo-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #6A1B9A; background: #fff; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .todo-check.done { background: #6A1B9A; color: white; border-color: #6A1B9A; }
+  .todo-text { flex: 1; font-size: 14px; }
+  .todo-text.done { text-decoration: line-through; color: #aaa; }
+  .todo-del { color: #E53935; font-size: 18px; cursor: pointer; padding: 0 4px; }
+  .note-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 1rem; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); position: relative; }
+  .note-card-day { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #EDE7F6; color: #6A1B9A; font-weight: 600; margin-bottom: 6px; }
+  .note-card-time { font-size: 11px; color: #aaa; margin-bottom: 6px; }
+  .note-card-text { font-size: 14px; color: #333; line-height: 1.65; white-space: pre-wrap; }
+  .note-card-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-top: 8px; cursor: pointer; }
+  .note-card-del { position: absolute; top: 10px; right: 10px; background: #ffeeee; color: #E53935; border: none; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 12px; }
+  .note-day-tag { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .day-tag-btn { padding: 5px 12px; border-radius: 999px; font-size: 12px; cursor: pointer; border: 1px solid #ddd; background: #f5f5f5; color: #666; }
+  .day-tag-btn.active { background: #6A1B9A; color: white; border-color: #6A1B9A; }
+  .notes-empty { text-align: center; padding: 30px 0; color: #ccc; font-size: 14px; line-height: 1.8; }
+
+
+  /* ══ 行程編輯 ══ */
+  .itin-edit-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .itin-mode-btn { flex: 1; padding: 9px 4px; border-radius: 10px; border: 1.5px solid #ddd; background: #fff; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; color: #666; }
+  .itin-mode-btn.active { background: #E53935; color: white; border-color: #E53935; }
+  .itin-edit-panel { background: #FFF8E1; border: 1px solid #FFE082; border-radius: 14px; padding: 1rem; margin-bottom: 12px; }
+  .itin-edit-panel h3 { font-size: 14px; font-weight: 600; color: #F57F17; margin-bottom: 10px; }
+  .itin-field { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fff; margin-bottom: 8px; font-family: inherit; }
+  .itin-field:focus { outline: none; border-color: #E53935; }
+  .itin-day-sel { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fff; margin-bottom: 8px; }
+  .itin-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .itin-save-btn { padding: 10px; border-radius: 10px; border: none; background: #E53935; color: white; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .itin-cancel-btn { padding: 10px; border-radius: 10px; border: 1px solid #ddd; background: #f5f5f5; color: #666; font-size: 14px; cursor: pointer; }
+  .itin-add-stop-btn { width: 100%; padding: 8px; border-radius: 8px; border: 1.5px dashed #E53935; background: #FFF5F5; color: #E53935; font-size: 12px; font-weight: 600; cursor: pointer; margin-bottom: 8px; }
+  .cloud-stop { background: #fff; border: 1px solid #FFD54F; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; position: relative; }
+  .cloud-stop-time { font-size: 11px; color: #999; }
+  .cloud-stop-name { font-size: 14px; font-weight: 600; margin: 2px 0; }
+  .cloud-stop-note { font-size: 12px; color: #888; }
+  .cloud-stop-actions { display: flex; gap: 6px; margin-top: 6px; }
+  .cloud-edit-btn { padding: 4px 12px; border-radius: 6px; border: 1px solid #FFB300; background: #FFF8E1; color: #F57F17; font-size: 11px; font-weight: 600; cursor: pointer; }
+  .cloud-del-btn { padding: 4px 12px; border-radius: 6px; border: 1px solid #FFCDD2; background: #FFEBEE; color: #E53935; font-size: 11px; font-weight: 600; cursor: pointer; }
+  .itin-sync-banner { background: #E3F2FD; border-radius: 10px; padding: 8px 12px; font-size: 12px; color: #1565C0; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .itin-loading { text-align: center; padding: 20px; color: #aaa; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -146,6 +203,7 @@
     <div class="tab" onclick="switchTab('phrases')">🗣 泰語</div>
     <div class="tab" onclick="switchTab('budget')">💰 記帳</div>
     <div class="tab" onclick="switchTab('qrzone')">🔒 票券</div>
+    <div class="tab" onclick="switchTab('notes')">📝 記事</div>
   </div>
 
   <!-- ══════════════ 機場 ══════════════ -->
@@ -236,6 +294,15 @@
   <!-- ══════════════ 行程 ══════════════ -->
   <div id="itinerary" class="section">
     <div class="pt"></div>
+
+    <!-- 模式切換 -->
+    <div class="itin-edit-bar">
+      <button class="itin-mode-btn active" id="itin-mode-fixed" onclick="switchItinMode('fixed')">📋 預設行程</button>
+      <button class="itin-mode-btn" id="itin-mode-cloud" onclick="switchItinMode('cloud')">☁️ 雲端行程</button>
+    </div>
+
+    <!-- 預設行程（原本的） -->
+    <div id="itin-fixed">
     <div class="itinerary">
 
       <!-- Day 1 -->
@@ -396,6 +463,40 @@
       </div>
 
     </div>
+    </div><!-- end itin-fixed -->
+
+    <!-- 雲端行程面板 -->
+    <div id="itin-cloud" style="display:none;">
+      <div class="itin-sync-banner">☁️ 雲端行程由 Google Sheet 同步，兩人即時共享</div>
+
+      <!-- 新增停留點表單 -->
+      <div class="itin-edit-panel" id="itin-form" style="display:none;">
+        <h3 id="itin-form-title">➕ 新增停留點</h3>
+        <input type="hidden" id="itin-edit-id">
+        <select class="itin-day-sel" id="itin-form-day">
+          <option value="Day1">Day 1 · 5/10 (日)</option>
+          <option value="Day2">Day 2 · 5/11 (一)</option>
+          <option value="Day3">Day 3 · 5/12 (二)</option>
+          <option value="Day4">Day 4 · 5/13 (三)</option>
+          <option value="Day5">Day 5 · 5/14 (四)</option>
+        </select>
+        <input class="itin-field" id="itin-form-time" placeholder="時間（例：14:30）">
+        <input class="itin-field" id="itin-form-name" placeholder="地點名稱（例：Chatuchak Market）">
+        <textarea class="itin-field" id="itin-form-note" rows="2" placeholder="備註（例：週日限定，黃金挖寶時間）"></textarea>
+        <div class="itin-btn-row">
+          <button class="itin-save-btn" onclick="saveItinStop()">💾 儲存</button>
+          <button class="itin-cancel-btn" onclick="hideItinForm()">取消</button>
+        </div>
+      </div>
+
+      <!-- 各天的雲端停留點 -->
+      <div id="itin-cloud-list">
+        <div class="itin-loading">載入雲端行程中...</div>
+      </div>
+
+      <button class="itin-add-stop-btn" onclick="showItinForm()">➕ 新增停留點</button>
+    </div>
+
   </div>
 
   <!-- ══════════════ 叫車 ══════════════ -->
@@ -526,6 +627,74 @@
     </div>
   </div>
 
+  <!-- ══════════════ 記事 ══════════════ -->
+  <div id="notes" class="section">
+    <div class="pt"></div>
+    <div class="notes-hero">
+      <h2>📝 彈性記事</h2>
+      <p>自由筆記・照片日記・待辦清單，全部存在手機本地</p>
+    </div>
+
+    <!-- 模式切換 -->
+    <div class="notes-type-bar">
+      <button class="notes-type-btn active" id="ntype-memo" onclick="switchNoteType('memo')">✏️ 筆記</button>
+      <button class="notes-type-btn" id="ntype-photo" onclick="switchNoteType('photo')">📸 日記</button>
+      <button class="notes-type-btn" id="ntype-todo" onclick="switchNoteType('todo')">✅ 待辦</button>
+    </div>
+
+    <!-- 筆記輸入區 -->
+    <div id="note-compose-memo" class="note-compose">
+      <div class="note-day-tag" id="memo-day-tags">
+        <span class="day-tag-btn active" onclick="setNoteDay(this,'')">全部</span>
+        <span class="day-tag-btn" onclick="setNoteDay(this,'Day1')">Day 1</span>
+        <span class="day-tag-btn" onclick="setNoteDay(this,'Day2')">Day 2</span>
+        <span class="day-tag-btn" onclick="setNoteDay(this,'Day3')">Day 3</span>
+        <span class="day-tag-btn" onclick="setNoteDay(this,'Day4')">Day 4</span>
+        <span class="day-tag-btn" onclick="setNoteDay(this,'Day5')">Day 5</span>
+      </div>
+      <textarea id="memo-text" rows="4" placeholder="隨手記下任何事情...&#10;推薦餐廳、小提醒、心得感想"></textarea>
+      <button class="note-submit-btn" onclick="addMemo()">💾 儲存筆記</button>
+    </div>
+
+    <!-- 照片日記輸入區 -->
+    <div id="note-compose-photo" class="note-compose" style="display:none;">
+      <div class="note-day-tag" id="photo-day-tags">
+        <span class="day-tag-btn active" onclick="setPhotoDay(this,'')">全部</span>
+        <span class="day-tag-btn" onclick="setPhotoDay(this,'Day1')">Day 1</span>
+        <span class="day-tag-btn" onclick="setPhotoDay(this,'Day2')">Day 2</span>
+        <span class="day-tag-btn" onclick="setPhotoDay(this,'Day3')">Day 3</span>
+        <span class="day-tag-btn" onclick="setPhotoDay(this,'Day4')">Day 4</span>
+        <span class="day-tag-btn" onclick="setPhotoDay(this,'Day5')">Day 5</span>
+      </div>
+      <textarea id="photo-text" rows="3" placeholder="今天的心得、好吃的店、特別的事..."></textarea>
+      <input type="file" id="photo-file" accept="image/*" style="display:none;" onchange="previewPhoto(event)">
+      <button onclick="document.getElementById('photo-file').click()" style="width:100%;padding:9px;border-radius:10px;border:1.5px dashed #6A1B9A;background:#F3E5F5;color:#6A1B9A;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:6px;">📷 選擇照片</button>
+      <img id="photo-preview" style="display:none;" class="note-img-preview">
+      <button class="note-submit-btn" onclick="addPhotoNote()">💾 儲存日記</button>
+    </div>
+
+    <!-- 待辦清單輸入區 -->
+    <div id="note-compose-todo" class="note-compose" style="display:none;">
+      <div style="font-size:13px; font-weight:600; color:#6A1B9A; margin-bottom:8px;">✅ 待辦清單</div>
+      <div class="todo-input-row">
+        <input class="todo-input" id="todo-input" placeholder="新增待辦事項...（例：買伴手禮）" onkeydown="if(event.key==='Enter')addTodo()">
+        <button class="todo-add-btn" onclick="addTodo()">＋</button>
+      </div>
+      <div id="todo-list"></div>
+      <div style="font-size:11px; color:#aaa; margin-top:8px; text-align:right;" id="todo-stats"></div>
+    </div>
+
+    <!-- 筆記 / 日記列表 -->
+    <div id="note-list-memo">
+      <div style="font-size:12px; font-weight:600; color:#999; text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px;">已儲存筆記</div>
+      <div id="memo-cards"></div>
+    </div>
+    <div id="note-list-photo" style="display:none;">
+      <div style="font-size:12px; font-weight:600; color:#999; text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px;">照片日記</div>
+      <div id="photo-cards"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- 匯率 Modal -->
@@ -569,7 +738,7 @@
 
 <script>
 // ── 全域設定 ──
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwhsVfXwWXyohqI4TKqx4Htz_xhfqQLxCuvQ0FlewQ8K9qMCswFoXcWEtpYAlFQW1Y7ug/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5rTLUifYwnMFkMrvzBGI3icWtkVyv3Nzz7As1Js0CM182eE0xGxhzN3Xy6n5Bl-E7/exec';
 const PIN_CODE = '0105';
 let currentPin = '';
 let THB_RATE = 0.92;
@@ -671,6 +840,8 @@ function switchTab(id) {
     s.classList.toggle('active', s.id === id);
   });
   if (id === 'budget') fetchExpenses();
+  if (id === 'notes') { renderMemos(); renderTodos(); }
+  if (id === 'itinerary' && curItinMode === 'cloud') loadCloudItin();
 }
 
 function toggleDay(id) {
@@ -1003,6 +1174,327 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) document.getElementById('airport-img-' + i).innerHTML = `<img src="${saved}">`;
   }
 });
+
+// ══════════════════════════════════
+// 📝 彈性記事
+// ══════════════════════════════════
+let curNoteType = 'memo';
+let curMemoDay = '';
+let curPhotoDay = '';
+let photoDataUrl = '';
+
+function switchNoteType(type) {
+  curNoteType = type;
+  ['memo','photo','todo'].forEach(t => {
+    document.getElementById('note-compose-' + t).style.display = t === type ? 'block' : 'none';
+    document.getElementById('note-list-' + (t === 'todo' ? 'memo' : t)).style.display =
+      t === 'todo' ? 'none' : (t === type ? 'block' : 'none');
+    document.getElementById('ntype-' + t).classList.toggle('active', t === type);
+  });
+  if (type === 'memo') { document.getElementById('note-list-memo').style.display = 'block'; renderMemos(); }
+  if (type === 'photo') { document.getElementById('note-list-photo').style.display = 'block'; renderPhotos(); }
+  if (type === 'todo') { renderTodos(); }
+}
+
+function setNoteDay(el, day) {
+  curMemoDay = day;
+  el.closest('.note-day-tag').querySelectorAll('.day-tag-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+function setPhotoDay(el, day) {
+  curPhotoDay = day;
+  el.closest('.note-day-tag').querySelectorAll('.day-tag-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── 筆記 ──
+function loadMemos() { try { return JSON.parse(localStorage.getItem('bkk_memos') || '[]'); } catch(e) { return []; } }
+function saveMemos(a) { localStorage.setItem('bkk_memos', JSON.stringify(a)); }
+
+function addMemo() {
+  const text = document.getElementById('memo-text').value.trim();
+  if (!text) { showToast('請輸入筆記內容'); return; }
+  const memos = loadMemos();
+  memos.unshift({ id: Date.now(), day: curMemoDay, text, time: new Date().toLocaleString('zh-TW') });
+  saveMemos(memos);
+  document.getElementById('memo-text').value = '';
+  renderMemos();
+  showToast('筆記已儲存 ✓');
+}
+
+function renderMemos() {
+  const memos = loadMemos();
+  const el = document.getElementById('memo-cards');
+  if (!memos.length) { el.innerHTML = '<div class="notes-empty">還沒有筆記<br>記下任何靈感吧！</div>'; return; }
+  el.innerHTML = memos.map(m => `
+    <div class="note-card">
+      <button class="note-card-del" onclick="delMemo(${m.id})">✕</button>
+      ${m.day ? `<div class="note-card-day">${m.day}</div>` : ''}
+      <div class="note-card-time">${m.time}</div>
+      <div class="note-card-text">${m.text}</div>
+    </div>`).join('');
+}
+
+function delMemo(id) {
+  saveMemos(loadMemos().filter(m => m.id !== id));
+  renderMemos();
+}
+
+// ── 照片日記 ──
+function loadPhotos() { try { return JSON.parse(localStorage.getItem('bkk_photos') || '[]'); } catch(e) { return []; } }
+function savePhotos(a) { try { localStorage.setItem('bkk_photos', JSON.stringify(a)); } catch(e) { showToast('儲存失敗，圖片太大，請用截圖'); } }
+
+function previewPhoto(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    photoDataUrl = ev.target.result;
+    const prev = document.getElementById('photo-preview');
+    prev.src = photoDataUrl; prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function addPhotoNote() {
+  const text = document.getElementById('photo-text').value.trim();
+  if (!text && !photoDataUrl) { showToast('請輸入文字或選擇照片'); return; }
+  const photos = loadPhotos();
+  photos.unshift({ id: Date.now(), day: curPhotoDay, text, img: photoDataUrl, time: new Date().toLocaleString('zh-TW') });
+  savePhotos(photos);
+  document.getElementById('photo-text').value = '';
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-file').value = '';
+  photoDataUrl = '';
+  renderPhotos();
+  showToast('日記已儲存 ✓');
+}
+
+function renderPhotos() {
+  const photos = loadPhotos();
+  const el = document.getElementById('photo-cards');
+  if (!photos.length) { el.innerHTML = '<div class="notes-empty">還沒有照片日記<br>上傳今天的照片記錄美好時刻！</div>'; return; }
+  el.innerHTML = photos.map(p => `
+    <div class="note-card">
+      <button class="note-card-del" onclick="delPhoto(${p.id})">✕</button>
+      ${p.day ? `<div class="note-card-day">${p.day}</div>` : ''}
+      <div class="note-card-time">${p.time}</div>
+      ${p.text ? `<div class="note-card-text">${p.text}</div>` : ''}
+      ${p.img ? `<img class="note-card-img" src="${p.img}" onclick="openImgFull('${p.id}')">` : ''}
+    </div>`).join('');
+}
+
+function delPhoto(id) {
+  savePhotos(loadPhotos().filter(p => p.id !== id));
+  renderPhotos();
+}
+
+function openImgFull(id) {
+  const p = loadPhotos().find(x => x.id == id);
+  if (!p || !p.img) return;
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+  overlay.innerHTML = `<button onclick="this.parentElement.remove()" style="position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.2);border:none;color:white;font-size:20px;cursor:pointer;">✕</button>
+    <img src="${p.img}" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;">
+    ${p.text ? `<div style="color:white;font-size:13px;margin-top:12px;opacity:0.85;text-align:center;">${p.text}</div>` : ''}`;
+  document.body.appendChild(overlay);
+}
+
+// ── 待辦清單 ──
+function loadTodos() { try { return JSON.parse(localStorage.getItem('bkk_todos') || '[]'); } catch(e) { return []; } }
+function saveTodos(a) { localStorage.setItem('bkk_todos', JSON.stringify(a)); }
+
+function addTodo() {
+  const input = document.getElementById('todo-input');
+  const text = input.value.trim();
+  if (!text) { showToast('請輸入待辦事項'); return; }
+  const todos = loadTodos();
+  todos.push({ id: Date.now(), text, done: false });
+  saveTodos(todos);
+  input.value = '';
+  renderTodos();
+}
+
+function toggleTodo(id) {
+  const todos = loadTodos();
+  const t = todos.find(x => x.id === id);
+  if (t) t.done = !t.done;
+  saveTodos(todos);
+  renderTodos();
+}
+
+function delTodo(id) {
+  saveTodos(loadTodos().filter(t => t.id !== id));
+  renderTodos();
+}
+
+function renderTodos() {
+  const todos = loadTodos();
+  const el = document.getElementById('todo-list');
+  const stats = document.getElementById('todo-stats');
+  if (!todos.length) {
+    el.innerHTML = '<div class="notes-empty" style="padding:16px 0;">還沒有待辦事項</div>';
+    stats.textContent = '';
+    return;
+  }
+  const done = todos.filter(t => t.done).length;
+  stats.textContent = `已完成 ${done} / ${todos.length} 項`;
+  // 未完成的在前，已完成的在後
+  const sorted = [...todos.filter(t => !t.done), ...todos.filter(t => t.done)];
+  el.innerHTML = sorted.map(t => `
+    <div class="todo-item">
+      <div class="todo-check ${t.done ? 'done' : ''}" onclick="toggleTodo(${t.id})">${t.done ? '✓' : ''}</div>
+      <div class="todo-text ${t.done ? 'done' : ''}">${t.text}</div>
+      <span class="todo-del" onclick="delTodo(${t.id})">×</span>
+    </div>`).join('');
+}
+
+
+// ══════════════════════════════════
+// ☁️ 雲端行程編輯
+// ══════════════════════════════════
+let curItinMode = 'fixed';
+let cloudStops = []; // 從 GAS 載入的雲端停留點
+
+function switchItinMode(mode) {
+  curItinMode = mode;
+  document.getElementById('itin-fixed').style.display = mode === 'fixed' ? 'block' : 'none';
+  document.getElementById('itin-cloud').style.display = mode === 'cloud' ? 'block' : 'none';
+  document.getElementById('itin-mode-fixed').classList.toggle('active', mode === 'fixed');
+  document.getElementById('itin-mode-cloud').classList.toggle('active', mode === 'cloud');
+  if (mode === 'cloud') loadCloudItin();
+}
+
+async function loadCloudItin() {
+  const listEl = document.getElementById('itin-cloud-list');
+  listEl.innerHTML = '<div class="itin-loading">☁️ 載入中...</div>';
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'itin_get' })
+    });
+    cloudStops = await res.json();
+    renderCloudItin();
+  } catch(e) {
+    listEl.innerHTML = '<div class="itin-loading" style="color:red;">雲端連線失敗，請確認網路</div>';
+  }
+}
+
+function renderCloudItin() {
+  const listEl = document.getElementById('itin-cloud-list');
+  const days = ['Day1','Day2','Day3','Day4','Day5'];
+  const dayLabels = {
+    Day1: 'Day 1 · 5/10 (日)',
+    Day2: 'Day 2 · 5/11 (一)',
+    Day3: 'Day 3 · 5/12 (二)',
+    Day4: 'Day 4 · 5/13 (三)',
+    Day5: 'Day 5 · 5/14 (四)'
+  };
+
+  if (!cloudStops.length) {
+    listEl.innerHTML = '<div class="itin-loading">雲端行程是空的<br>點下方「新增停留點」開始建立</div>';
+    return;
+  }
+
+  let html = '';
+  days.forEach(day => {
+    const stops = cloudStops
+      .filter(r => r[1] === day)
+      .sort((a, b) => (a[2] || '').localeCompare(b[2] || ''));
+    if (!stops.length) return;
+
+    html += `<div style="margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:600;color:#E53935;margin-bottom:6px;padding-left:2px;">
+        📅 ${dayLabels[day]}
+      </div>`;
+    stops.forEach(r => {
+      // r: [id, day, time, name, note, created]
+      html += `<div class="cloud-stop">
+        <div class="cloud-stop-time">${r[2] || ''}</div>
+        <div class="cloud-stop-name">${r[3] || ''}</div>
+        ${r[4] ? `<div class="cloud-stop-note">${r[4]}</div>` : ''}
+        <div class="cloud-stop-actions">
+          <button class="cloud-edit-btn" onclick="editItinStop('${r[0]}')">✏️ 編輯</button>
+          <button class="cloud-del-btn" onclick="deleteItinStop('${r[0]}')">🗑 刪除</button>
+          <button class="ride-mini" style="font-size:11px;" onclick="fillAndRide('', '${r[3]}')">🚕 叫車</button>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  listEl.innerHTML = html;
+}
+
+function showItinForm(id) {
+  document.getElementById('itin-form').style.display = 'block';
+  document.getElementById('itin-form-title').textContent = id ? '✏️ 編輯停留點' : '➕ 新增停留點';
+  document.getElementById('itin-edit-id').value = id || '';
+  if (!id) {
+    // 清空
+    document.getElementById('itin-form-day').value = 'Day1';
+    document.getElementById('itin-form-time').value = '';
+    document.getElementById('itin-form-name').value = '';
+    document.getElementById('itin-form-note').value = '';
+  }
+  document.getElementById('itin-form-name').focus();
+  document.getElementById('itin-form').scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideItinForm() {
+  document.getElementById('itin-form').style.display = 'none';
+  document.getElementById('itin-edit-id').value = '';
+}
+
+function editItinStop(id) {
+  const stop = cloudStops.find(r => String(r[0]) === String(id));
+  if (!stop) return;
+  showItinForm(id);
+  document.getElementById('itin-form-day').value = stop[1] || 'Day1';
+  document.getElementById('itin-form-time').value = stop[2] || '';
+  document.getElementById('itin-form-name').value = stop[3] || '';
+  document.getElementById('itin-form-note').value = stop[4] || '';
+}
+
+async function saveItinStop() {
+  const id = document.getElementById('itin-edit-id').value;
+  const day  = document.getElementById('itin-form-day').value;
+  const time = document.getElementById('itin-form-time').value.trim();
+  const name = document.getElementById('itin-form-name').value.trim();
+  const note = document.getElementById('itin-form-note').value.trim();
+
+  if (!name) { showToast('請填寫地點名稱'); return; }
+
+  showToast('同步中...');
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: id ? 'itin_edit' : 'itin_add',
+        id, day, time, name, note
+      })
+    });
+    hideItinForm();
+    await loadCloudItin();
+    showToast(id ? '✓ 已更新' : '✓ 已新增');
+  } catch(e) {
+    showToast('雲端連線失敗，請重試');
+  }
+}
+
+async function deleteItinStop(id) {
+  if (!confirm('確定要刪除這個停留點嗎？')) return;
+  showToast('刪除中...');
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'itin_delete', id })
+    });
+    await loadCloudItin();
+    showToast('✓ 已刪除');
+  } catch(e) {
+    showToast('刪除失敗，請重試');
+  }
+}
+
 </script>
 </body>
 </html>
